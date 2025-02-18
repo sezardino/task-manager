@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./data/mongo:/data/db
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: task-manager
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - app_dev
+
+networks:
+  app_dev:
+    driver: bridge
