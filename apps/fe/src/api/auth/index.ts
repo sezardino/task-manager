@@ -1,5 +1,9 @@
 import { fetchGQL } from "@/utils/fetch-gql";
-import { LOGIN_MUTATION_QUERY, REGISTRATION_MUTATION_QUERY } from "./queries";
+import {
+  LOGIN_MUTATION_QUERY,
+  REFRESH_TOKENS_MUTATION_QUERY,
+  REGISTRATION_MUTATION_QUERY,
+} from "./queries";
 import {
   LoginInput,
   LoginPayload,
@@ -25,10 +29,8 @@ export class AuthApiService {
 
   static refreshTokens(token: string) {
     return fetchGQL<RefreshPayload>({
-      query: REGISTRATION_MUTATION_QUERY,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      query: REFRESH_TOKENS_MUTATION_QUERY,
+      data: { token },
+    }).then((r) => r.data.data.refreshTokens);
   }
 }

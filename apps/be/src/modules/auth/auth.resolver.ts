@@ -27,7 +27,10 @@ export class AuthResolver {
 
   @Mutation(() => RefreshTokensPayload)
   @UseGuards(RefreshGuard)
-  refreshTokens(@CurrentUser('id') userId: string) {
+  refreshTokens(
+    // @Args('token') token: string,
+    @CurrentUser('id') userId: string,
+  ) {
     return this.authService.refreshTokens(userId);
   }
 }

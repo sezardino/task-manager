@@ -35,6 +35,9 @@ export class TokensService {
   async generate(params: GenerateTokenParams) {
     const { payload, type } = params;
 
-    return this.jwtService.signAsync(payload, this.getConfig(type));
+    return this.jwtService.signAsync(
+      { ...payload, type },
+      this.getConfig(type),
+    );
   }
 }

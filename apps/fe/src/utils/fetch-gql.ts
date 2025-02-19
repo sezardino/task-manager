@@ -1,10 +1,7 @@
 import { axiosInstance } from "@/libs/axios";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 
-type Params<Variables = object> = Omit<
-  AxiosRequestConfig,
-  "method" | "url" | "data"
-> & {
+type Params<Variables = object> = Omit<AxiosRequestConfig, "method" | "url"> & {
   query: string;
   variables?: Variables;
 };
@@ -12,14 +9,14 @@ type Params<Variables = object> = Omit<
 export const fetchGQL = async <Payload, Variables = object>(
   params: Params<Variables>
 ): Promise<AxiosResponse<Payload>> => {
-  const { query, variables, ...rest } = params;
-  const data = { query, variables };
+  const { query, variables, data, ...rest } = params;
+  const body = { query, variables, ...data };
 
   try {
     const response = await axiosInstance({
       method: "POST",
       url: "/graphql",
-      data,
+      data: body,
       ...rest,
     });
 

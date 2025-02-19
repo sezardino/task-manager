@@ -10,6 +10,8 @@ const AuthPage = lazy(() => import("@/pages/auth/index"));
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const RegistrationPage = lazy(() => import("@/pages/auth/registration"));
 
+const LandingPage = lazy(() => import("@/pages/landing/index"));
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -30,10 +32,6 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: ApplicationUrls.landing.index,
-        Component: () => <h1>Landing</h1>,
-      },
-      {
         path: ApplicationUrls.auth.index,
         Component: () => (
           <AuthLayout>
@@ -46,6 +44,16 @@ export const router = createBrowserRouter([
           {
             path: ApplicationUrls.auth.registration,
             Component: RegistrationPage,
+          },
+        ],
+      },
+      {
+        path: ApplicationUrls.landing.index,
+        Component: () => <Outlet />,
+        children: [
+          {
+            path: ApplicationUrls.landing.index,
+            Component: LandingPage,
           },
         ],
       },
