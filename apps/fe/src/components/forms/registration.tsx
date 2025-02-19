@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,7 +17,6 @@ import { z } from "zod";
 
 export const RegistrationFormSchema = z
   .object({
-    name: z.string({ required_error: "Name is required field" }),
     email: z
       .string({ required_error: "Email is required field" })
       .email("Invalid email"),
@@ -54,23 +51,6 @@ export const RegistrationForm = (props: RegistrationFormProps) => {
         onSubmit={form.handleSubmit(submitHandler)}
         className={cn("grid gap-4", className)}
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  name="name"
-                  placeholder="Enter your name"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="email"

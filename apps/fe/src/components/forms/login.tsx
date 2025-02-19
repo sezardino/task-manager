@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -86,7 +84,6 @@ export const LoginForm = (props: LoginFormProps) => {
         <Button
           type="submit"
           disabled={form.formState.isSubmitting}
-          variant={"accent"}
           className="mt-2 w-full"
         >
           Login

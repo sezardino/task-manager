@@ -1,12 +1,14 @@
 import { Spinner } from "@/components/ui/spinner";
+import { currentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { AuthLayout } from "@/layouts/auth";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { getFromCacheOrFetch } from "../react-query";
 import { ApplicationUrls } from "./const";
-import { currentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 
+const AuthPage = lazy(() => import("@/pages/auth/index"));
 const LoginPage = lazy(() => import("@/pages/auth/login"));
+const RegistrationPage = lazy(() => import("@/pages/auth/registration"));
 
 export const router = createBrowserRouter([
   {
@@ -39,11 +41,11 @@ export const router = createBrowserRouter([
           </AuthLayout>
         ),
         children: [
-          { path: ApplicationUrls.auth.index, Component: LoginPage },
+          { path: ApplicationUrls.auth.index, Component: AuthPage },
           { path: ApplicationUrls.auth.login, Component: LoginPage },
           {
             path: ApplicationUrls.auth.registration,
-            Component: () => <h1>Auth</h1>,
+            Component: RegistrationPage,
           },
         ],
       },
