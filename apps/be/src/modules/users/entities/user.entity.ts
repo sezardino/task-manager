@@ -7,7 +7,4 @@ export class GqlUser {
 
   @Field()
   email: string;
-
-  @Field()
-  password: string;
 }
