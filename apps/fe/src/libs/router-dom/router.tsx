@@ -1,12 +1,19 @@
 import { Suspense } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { ApplicationUrls } from "./const";
+import { Spinner } from "@/components/ui/spinner";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Suspense fallback={<p>loading</p>}>
+      <Suspense
+        fallback={
+          <div className="w-full h-dvh flex">
+            <Spinner className="w-20 h-20 m-auto" />
+          </div>
+        }
+      >
         <Outlet />
       </Suspense>
     ),
