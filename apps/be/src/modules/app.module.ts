@@ -13,6 +13,8 @@ import { PrismaModule } from './utils/prisma/prisma.module';
       debug: true,
       playground: true,
     }),
+    PrismaModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
