@@ -1,11 +1,20 @@
-import { Suspense } from "react";
-import { createBrowserRouter, Outlet } from "react-router-dom";
-import { ApplicationUrls } from "./const";
 import { Spinner } from "@/components/ui/spinner";
+import { AuthLayout } from "@/layouts/auth";
+import { lazy, Suspense } from "react";
+import { createBrowserRouter, Outlet } from "react-router-dom";
+import { getFromCacheOrFetch } from "../react-query";
+import { ApplicationUrls } from "./const";
+import { currentUserQuery } from "@/hooks/tanstack/query/user/current-user";
+
+const LoginPage = lazy(() => import("@/pages/auth/login"));
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    loader: () => {
+      getFromCacheOrFetch(currentUserQuery);
+      return null;
+    },
     element: (
       <Suspense
         fallback={
@@ -24,10 +33,14 @@ export const router = createBrowserRouter([
       },
       {
         path: ApplicationUrls.auth.index,
-        Component: () => <Outlet />,
+        Component: () => (
+          <AuthLayout>
+            <Outlet />
+          </AuthLayout>
+        ),
         children: [
-          { path: ApplicationUrls.auth.index, Component: () => <h1>Auth</h1> },
-          { path: ApplicationUrls.auth.login, Component: () => <h1>Auth</h1> },
+          { path: ApplicationUrls.auth.index, Component: LoginPage },
+          { path: ApplicationUrls.auth.login, Component: LoginPage },
           {
             path: ApplicationUrls.auth.registration,
             Component: () => <h1>Auth</h1>,
