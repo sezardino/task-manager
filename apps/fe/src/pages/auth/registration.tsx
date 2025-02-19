@@ -1,7 +1,8 @@
 import {
-  RegistrationFormValues,
   RegistrationForm,
+  RegistrationFormValues,
 } from "@/components/forms/registration";
+import { LOGIN_EMAIL_SEARCH_PARAM } from "@/const/search-params";
 import { useRegistrationMutation } from "@/hooks/tanstack/mutations/user/register";
 import { ApplicationUrls } from "@/libs/router-dom";
 import { useCallback } from "react";
@@ -10,13 +11,23 @@ import { Link, useNavigate } from "react-router-dom";
 const RegistrationPage = () => {
   const navigate = useNavigate();
 
-  const { mutateAsync: registration } = useRegistrationMutation();
+  const { mutateAsync: registration, error } = useRegistrationMutation();
 
   const registrationHandler = useCallback(
     async (values: RegistrationFormValues) => {
       try {
-        await registration(values);
-        navigate(ApplicationUrls.auth.login);
+        const response = await registration({
+          email: values.email,
+          password: values.password,
+        });
+
+        const redirectURL = new URL(
+          ApplicationUrls.auth.login,
+          window.location.origin
+        );
+        redirectURL.searchParams.set(LOGIN_EMAIL_SEARCH_PARAM, response.email);
+
+        navigate(redirectURL.pathname + redirectURL.search);
       } catch (e) {
         console.error(e);
       }
@@ -31,7 +42,7 @@ const RegistrationPage = () => {
         <p className="text-muted-foreground">Sign up in less than 2 minutes.</p>
       </header>
 
-      <RegistrationForm onSubmit={registrationHandler} />
+      <RegistrationForm onSubmit={registrationHandler} error={error?.message} />
       {/* TODO: add registration by Google */}
       <footer className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
         <p>Already have an account?</p>

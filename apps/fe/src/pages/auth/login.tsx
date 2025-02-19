@@ -1,20 +1,21 @@
 import { LoginForm, LoginFormValues } from "@/components/forms/login";
+import { LOGIN_EMAIL_SEARCH_PARAM } from "@/const/search-params";
 import { useLoginMutation } from "@/hooks/tanstack/mutations/auth/login";
-import { useCurrentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { ApplicationUrls } from "@/libs/router-dom";
 import { useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  useCurrentUserQuery();
+  const [searchParams] = useSearchParams();
 
-  const { mutateAsync: login } = useLoginMutation();
+  const { mutateAsync: login, error } = useLoginMutation();
 
   const loginHandler = useCallback(
     async (values: LoginFormValues) => {
       try {
         await login(values);
+
         navigate(ApplicationUrls.application.index);
       } catch (e) {
         console.error(e);
@@ -30,7 +31,13 @@ const LoginPage = () => {
         <p className="text-muted-foreground">Enter your information to login</p>
       </header>
 
-      <LoginForm onSubmit={loginHandler} />
+      <LoginForm
+        onSubmit={loginHandler}
+        initialValues={{
+          email: searchParams.get(LOGIN_EMAIL_SEARCH_PARAM) || undefined,
+        }}
+        error={error?.message || undefined}
+      />
 
       <p className="text-center my-5">or</p>
 

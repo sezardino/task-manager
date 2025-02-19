@@ -10,7 +10,7 @@ export const LOGIN_MUTATION_QUERY = `
 
 export const REGISTRATION_MUTATION_QUERY = `
   mutation Registration($input: RegistrationInput!) {
-    login(input: $input) {
+    registration(input: $input) {
       email
     }
   }

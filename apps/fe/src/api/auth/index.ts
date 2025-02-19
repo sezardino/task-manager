@@ -19,8 +19,8 @@ export class AuthApiService {
   static registration(input: RegistrationInput) {
     return fetchGQL<RegistrationPayload>({
       query: REGISTRATION_MUTATION_QUERY,
-      variables: input,
-    });
+      variables: { input },
+    }).then((r) => r.data.data.registration);
   }
 
   static refreshTokens(token: string) {

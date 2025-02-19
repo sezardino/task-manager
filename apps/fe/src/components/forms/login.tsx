@@ -26,14 +26,17 @@ export type LoginFormValues = z.infer<typeof LoginFormSchema>;
 type OmittedProps = Omit<ComponentPropsWithoutRef<"form">, "onSubmit">;
 export type LoginFormProps = OmittedProps & {
   onSubmit: (values: LoginFormValues) => Promise<void>;
+  initialValues?: Partial<LoginFormValues>;
+  error?: string;
 };
 
 export const LoginForm = (props: LoginFormProps) => {
-  const { onSubmit, className, ...rest } = props;
+  const { error, initialValues, onSubmit, className, ...rest } = props;
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginFormSchema),
     mode: "all",
+    defaultValues: initialValues,
   });
 
   const submitHandler = (values: LoginFormValues) => {
@@ -80,6 +83,10 @@ export const LoginForm = (props: LoginFormProps) => {
             </FormItem>
           )}
         />
+
+        {typeof error === "string" && (
+          <p className="text-destructive text-sm text-center">{error}</p>
+        )}
 
         <Button
           type="submit"

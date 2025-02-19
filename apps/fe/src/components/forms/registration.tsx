@@ -30,10 +30,11 @@ export type RegistrationFormValues = z.infer<typeof RegistrationFormSchema>;
 type OmittedProps = Omit<ComponentPropsWithoutRef<"form">, "onSubmit">;
 export type RegistrationFormProps = OmittedProps & {
   onSubmit: (values: RegistrationFormValues) => Promise<void>;
+  error?: string;
 };
 
 export const RegistrationForm = (props: RegistrationFormProps) => {
-  const { onSubmit, className, ...rest } = props;
+  const { error, onSubmit, className, ...rest } = props;
 
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(RegistrationFormSchema),
@@ -101,6 +102,10 @@ export const RegistrationForm = (props: RegistrationFormProps) => {
             </FormItem>
           )}
         />
+
+        {typeof error === "string" && (
+          <p className="text-destructive text-sm text-center">{error}</p>
+        )}
 
         <Button
           type="submit"
