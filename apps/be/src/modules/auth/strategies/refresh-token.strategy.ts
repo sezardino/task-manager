@@ -2,14 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { refreshTokenConfig } from 'src/modules/utils/tokens/config/refresh-token.config';
 import { RefreshTokenPayload } from 'src/modules/utils/tokens/types/payloads';
 import { AuthService } from '../auth.service';
+
+export const REFRESH_STRATEGY_NAME = 'refresh-strategy-name';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
-  refreshTokenConfig.KEY,
+  REFRESH_STRATEGY_NAME,
 ) {
   constructor(
     private configService: ConfigService,

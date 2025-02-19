@@ -51,9 +51,14 @@ export class AuthService {
 
     if (!isPasswordMatch) throw new BadRequestException('Wrong credentials');
 
-    const payload = { sub: { email: user.email, userId: user.id } };
+    const atPayload: AccessTokenPayload = {
+      sub: { email: user.email, userId: user.id },
+    };
+    const rtPayload: RefreshTokenPayload = {
+      sub: { email: user.email, userId: user.id },
+    };
 
-    const tokens = await this.generateTokens(payload, payload);
+    const tokens = await this.generateTokens(atPayload, rtPayload);
 
     return {
       email: user.email,
@@ -76,5 +81,25 @@ export class AuthService {
     if (!user) throw new UnauthorizedException();
 
     return { id: user.id, email: user.email };
+  }
+
+  async refreshTokens(userId: string) {
+    const user = await this.usersService.findForAuth({ id: userId });
+
+    if (!user) throw new BadRequestException('Wrong credentials');
+
+    const atPayload: AccessTokenPayload = {
+      sub: { email: user.email, userId: user.id },
+    };
+    const rtPayload: RefreshTokenPayload = {
+      sub: { email: user.email, userId: user.id },
+    };
+
+    const tokens = await this.generateTokens(atPayload, rtPayload);
+
+    return {
+      accessToken: tokens.access,
+      refreshToken: tokens.refresh,
+    };
   }
 }
