@@ -10,11 +10,50 @@ datasource db {
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  email    String @unique
+  email    String   @unique
   password String
+  role     UserRole @default(MEMBER)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updatedAt")
+
+  organizationsOwned      Organization[]       @relation("owner")
+  organizationMemberships OrganizationMember[]
 
   @@map("users")
+}
+
+model Organization {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  ownerId String @map("owner_id") @db.ObjectId
+  owner   User   @relation("owner", fields: [ownerId], references: [id])
+
+  members OrganizationMember[]
+
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String           @map("user_id") @db.ObjectId
+  organizationId String           @map("organization_id") @db.ObjectId
+  role           OrganizationRole
+
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("organization_members")
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum UserRole {
+  OWNER
+  MEMBER
 }

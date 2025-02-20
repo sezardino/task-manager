@@ -45,7 +45,7 @@ axiosInstance.interceptors.response.use(
         axiosInstance.defaults.headers.common["Authorization"] =
           `Bearer ${accessToken}`;
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        console.log(accessToken);
+
         isRetrying = false;
 
         return axiosInstance(originalRequest);

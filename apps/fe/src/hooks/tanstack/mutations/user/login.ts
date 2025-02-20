@@ -6,12 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 export const useLoginMutation = () =>
   useMutation({
     mutationFn: (input: LoginInput) => AuthApiService.login(input),
-    onSuccess: (payload) => {
-      console.log(payload);
-
-      TokensService.setTokens(
-        payload.data.data.login.accessToken,
-        payload.data.data.login.refreshToken
-      );
-    },
+    onSuccess: (payload) =>
+      TokensService.setTokens(payload.accessToken, payload.refreshToken),
   });

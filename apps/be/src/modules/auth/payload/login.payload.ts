@@ -10,4 +10,7 @@ export class LoginPayload {
 
   @Field()
   refreshToken: string;
+
+  @Field(() => Boolean)
+  onboarding: boolean;
 }
