@@ -1,6 +1,7 @@
 import { Spinner } from "@/components/ui/spinner";
 import { currentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { AuthLayout } from "@/layouts/auth";
+import { OnboardingLayout } from "@/layouts/onboarding";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { getFromCacheOrFetch } from "../react-query";
@@ -9,6 +10,10 @@ import { ApplicationUrls } from "./const";
 const AuthPage = lazy(() => import("@/pages/auth/index"));
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const RegistrationPage = lazy(() => import("@/pages/auth/registration"));
+
+const OnboardingPage = lazy(() => import("@/pages/onboarding/index"));
+
+const OrganizationPage = lazy(() => import("@/pages/organization/index"));
 
 const LandingPage = lazy(() => import("@/pages/landing/index"));
 
@@ -48,6 +53,20 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        path: ApplicationUrls.onboarding.index,
+        Component: () => (
+          <OnboardingLayout>
+            <Outlet />
+          </OnboardingLayout>
+        ),
+        children: [
+          {
+            path: ApplicationUrls.onboarding.index,
+            Component: OnboardingPage,
+          },
+        ],
+      },
+      {
         path: ApplicationUrls.landing.index,
         Component: () => <Outlet />,
         children: [
@@ -64,6 +83,16 @@ export const router = createBrowserRouter([
           {
             path: ApplicationUrls.application.index,
             Component: () => <h1>App</h1>,
+          },
+        ],
+      },
+      {
+        path: ApplicationUrls.application.organization.index(),
+        Component: () => <Outlet />,
+        children: [
+          {
+            path: ApplicationUrls.application.organization.index(),
+            Component: OrganizationPage,
           },
         ],
       },

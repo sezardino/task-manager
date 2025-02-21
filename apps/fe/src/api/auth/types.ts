@@ -5,6 +5,7 @@ export type LoginPayload = GQLPayload<{
     email: string;
     accessToken: string;
     refreshToken: string;
+    onboarding: boolean;
   };
 }>;
 

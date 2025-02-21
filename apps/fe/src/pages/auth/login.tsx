@@ -14,9 +14,13 @@ const LoginPage = () => {
   const loginHandler = useCallback(
     async (values: LoginFormValues) => {
       try {
-        await login(values);
+        const response = await login(values);
 
-        navigate(ApplicationUrls.application.index);
+        let redirectUrl = ApplicationUrls.application.index;
+
+        if (response.onboarding) redirectUrl = ApplicationUrls.onboarding.index;
+
+        navigate(redirectUrl);
       } catch (e) {
         console.error(e);
       }

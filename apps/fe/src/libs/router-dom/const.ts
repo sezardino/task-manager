@@ -9,5 +9,11 @@ export const ApplicationUrls = Object.freeze({
   },
   application: {
     index: "/app",
+    organization: {
+      index: (id = ":organizationId") => `/${id}`,
+    },
+  },
+  onboarding: {
+    index: "/onboarding",
   },
 });
