@@ -18,6 +18,12 @@ export class GqlUser {
   @Field()
   email: string;
 
+  @Field({ nullable: true })
+  firstName: string | null;
+
+  @Field({ nullable: true })
+  lastName: string | null;
+
   @Field(() => UserRole)
   role: UserRole;
 

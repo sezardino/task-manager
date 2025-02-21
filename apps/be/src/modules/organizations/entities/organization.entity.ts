@@ -7,6 +7,12 @@ export class Member {
 
   @Field()
   email: string;
+
+  @Field({ nullable: true })
+  firstName: string | null;
+
+  @Field({ nullable: true })
+  lastName: string | null;
 }
 
 @ObjectType()

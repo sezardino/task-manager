@@ -2,8 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { hash } from 'argon2';
 import { PrismaService } from '../utils/prisma/prisma.service';
-import { CreateOwnerUserInput } from './dto/create-user.input';
+import { CreateUserInput } from './dto/create-user.input';
 import { GqlUser } from './entities/user.entity';
+import { PrismaTransaction } from '../utils/prisma/types';
 
 @Injectable()
 export class UsersService {
@@ -51,12 +52,18 @@ export class UsersService {
     };
   }
 
-  async createOwner(input: CreateOwnerUserInput) {
-    return this.prismaService.user.create({
+  async createUser(
+    input: CreateUserInput,
+    role: UserRole,
+    trx?: PrismaTransaction,
+  ) {
+    const prisma = trx ? trx : this.prismaService;
+
+    return prisma.user.create({
       data: {
         email: input.email,
         password: await hash(input.password),
-        role: UserRole.OWNER,
+        role,
       },
     });
   }

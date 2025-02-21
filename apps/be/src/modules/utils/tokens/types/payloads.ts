@@ -15,3 +15,10 @@ export type RefreshTokenPayload = {
     role: UserRole;
   };
 };
+
+export type OrganizationInviteTokenPayload = {
+  sub: {
+    inviteId: string;
+    organizationId: string;
+  };
+};

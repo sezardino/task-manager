@@ -10,6 +10,9 @@ datasource db {
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+
   email    String   @unique
   password String
   role     UserRole @default(MEMBER)
@@ -20,6 +23,9 @@ model User {
   organizationsOwned      Organization[]       @relation("owner")
   organizationMemberships OrganizationMember[]
 
+  acceptedInvite   OrganizationInvite? @relation(fields: [acceptedInviteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  acceptedInviteId String?             @unique @map("accepted_invite_id") @db.ObjectId
+
   @@map("users")
 }
 
@@ -28,9 +34,11 @@ model Organization {
   name String
 
   ownerId String @map("owner_id") @db.ObjectId
-  owner   User   @relation("owner", fields: [ownerId], references: [id])
+  owner   User   @relation("owner", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   members OrganizationMember[]
+
+  invites OrganizationInvite[]
 
   @@map("organizations")
 }
@@ -41,10 +49,33 @@ model OrganizationMember {
   organizationId String           @map("organization_id") @db.ObjectId
   role           OrganizationRole
 
-  user         User         @relation(fields: [userId], references: [id])
-  organization Organization @relation(fields: [organizationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("organization_members")
+}
+
+model OrganizationInvite {
+  id     String           @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  token  String?          @unique
+  status InviteStatus     @default(PENDING)
+  role   OrganizationRole
+
+  acceptedById String? @map("accepted_by_id")
+  acceptedBy   User?
+
+  organizationId String       @map("organization_id") @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([acceptedById, organizationId])
+  @@map("organization_invites")
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
 
 enum OrganizationRole {

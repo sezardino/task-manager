@@ -77,7 +77,7 @@ export class AuthService {
 
     if (user) throw new ConflictException('This email already in use');
 
-    return this.usersService.createOwner(input);
+    return this.usersService.createUser(input, UserRole.OWNER);
   }
 
   async validateTokenUser(userId: string): Promise<UserInRequest> {

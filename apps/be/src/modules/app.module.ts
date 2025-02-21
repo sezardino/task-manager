@@ -2,10 +2,12 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { PrismaModule } from './utils/prisma/prisma.module';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { OrganizationInvitesModule } from './organization-invites/organization-invites.module';
+import { OrganizationMembersModule } from './organization-members/organization-members.module';
 import { OrganizationsModule } from './organizations/organizations.module';
+import { UsersModule } from './users/users.module';
+import { PrismaModule } from './utils/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { OrganizationsModule } from './organizations/organizations.module';
     UsersModule,
     AuthModule,
     OrganizationsModule,
+    OrganizationInvitesModule,
+    OrganizationMembersModule,
   ],
 })
 export class AppModule {}

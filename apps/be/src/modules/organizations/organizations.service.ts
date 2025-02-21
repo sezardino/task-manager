@@ -38,7 +38,28 @@ export class OrganizationsService {
       members: organization.members.map((m) => ({
         id: m.user.id,
         email: m.user.email,
+        firstName: m.user.firstName,
+        lastName: m.user.lastName,
       })),
+    };
+  }
+
+  async preview(organizationId: string) {
+    const organization = await this.prismaService.organization.findUnique({
+      where: { id: organizationId },
+      include: {
+        _count: { select: { members: true } },
+        owner: {
+          select: { id: true, email: true, firstName: true, lastName: true },
+        },
+      },
+    });
+
+    return {
+      id: organization.id,
+      name: organization.name,
+      owner: organization.owner,
+      members: organization._count.members,
     };
   }
 }
