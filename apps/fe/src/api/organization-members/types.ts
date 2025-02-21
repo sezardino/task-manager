@@ -1,6 +1,6 @@
+import { UserRole } from "@/types/enums";
 import { GQLPayload } from "@/types/gql";
 import { PaginationInput, PaginationPayload } from "@/types/pagination";
-import { UserRole } from "../user/types";
 
 export type OrganizationMember = {
   id: string;

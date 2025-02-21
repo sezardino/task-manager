@@ -1,7 +1,7 @@
-import { UserRole } from "@/api/user/types";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableProps } from "@/components/ui/data-table";
 import { USER_ROLES_COPY } from "@/const/user-roles-copy";
+import { UserRole } from "@/types/enums";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 

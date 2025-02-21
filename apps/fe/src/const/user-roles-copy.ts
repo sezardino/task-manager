@@ -1,7 +1,7 @@
-import { UserRole } from "@/api/user/types";
+import { UserRole } from "@/types/enums";
 
 export const USER_ROLES_COPY: Record<UserRole, string> = {
   MEMBER: "Member",
-  MODERATOR: "Moderator",
+  ADMIN: "ADMIN",
   OWNER: "Owner",
 };

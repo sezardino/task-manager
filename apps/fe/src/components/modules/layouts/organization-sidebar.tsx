@@ -1,4 +1,3 @@
-import { UserRole } from "@/api/user/types";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -15,6 +14,7 @@ import {
 import { useCurrentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { useForceLogout } from "@/hooks/use-force-logout";
 import { ApplicationPageParams, ApplicationUrls } from "@/libs/router-dom";
+import { UserRole } from "@/types/enums";
 import {
   Tooltip,
   TooltipContent,
@@ -57,7 +57,7 @@ export const OrganizationSidebar = () => {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        {[UserRole.OWNER, UserRole.MODERATOR].includes(
+        {[UserRole.OWNER, UserRole.ADMIN].includes(
           user?.role || UserRole.MEMBER
         ) && (
           <SidebarGroup>

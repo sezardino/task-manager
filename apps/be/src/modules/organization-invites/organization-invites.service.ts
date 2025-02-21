@@ -116,7 +116,7 @@ export class OrganizationInvitesService {
           id: payload.sub.inviteId,
           organizationId: payload.sub.organizationId,
         },
-        data: { status: InviteStatus.DECLINED },
+        data: { status: InviteStatus.USER_REJECT, decideAt: new Date() },
       });
 
       return;
@@ -143,7 +143,7 @@ export class OrganizationInvitesService {
           id: payload.sub.inviteId,
           organizationId: payload.sub.organizationId,
         },
-        data: { status: InviteStatus.ACCEPTED },
+        data: { status: InviteStatus.USER_ACCEPT, decideAt: new Date() },
       });
     });
   }
@@ -151,7 +151,14 @@ export class OrganizationInvitesService {
   async one(inviteId: string): Promise<GqlOrganizationInvite> {
     return await this.prismaService.organizationInvite.findUnique({
       where: { id: inviteId },
-      select: { id: true, role: true, name: true, status: true },
+      select: {
+        id: true,
+        role: true,
+        name: true,
+        status: true,
+        createdAt: true,
+        decideAt: true,
+      },
     });
   }
 
@@ -170,7 +177,14 @@ export class OrganizationInvitesService {
 
     const invites = await this.prismaService.organizationInvite.findMany({
       where: { organizationId: input.organizationId },
-      select: { id: true, name: true, role: true, status: true },
+      select: {
+        id: true,
+        name: true,
+        role: true,
+        status: true,
+        createdAt: true,
+        decideAt: true,
+      },
       skip,
       take: input.limit,
     });

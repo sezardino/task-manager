@@ -1,10 +1,5 @@
+import { UserRole } from "@/types/enums";
 import { GQLPayload } from "@/types/gql";
-
-export enum UserRole {
-  OWNER = "OWNER",
-  MEMBER = "MEMBER",
-  MODERATOR = "MODERATOR",
-}
 
 export type CurrentUserPayload = GQLPayload<{
   user: {

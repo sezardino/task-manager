@@ -68,14 +68,18 @@ model OrganizationInvite {
   organizationId String       @map("organization_id") @db.ObjectId
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
+  decideAt  DateTime? @map("decide_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
   @@unique([acceptedById, organizationId])
   @@map("organization_invites")
 }
 
 enum InviteStatus {
   PENDING
-  ACCEPTED
-  DECLINED
+  USER_ACCEPT
+  USER_REJECT
+  ADMIN_REJECT
 }
 
 enum OrganizationRole {
@@ -87,5 +91,5 @@ enum OrganizationRole {
 enum UserRole {
   OWNER
   MEMBER
-  MODERATOR
+  ADMIN
 }
