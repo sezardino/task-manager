@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InviteStatus, UserRole } from '@prisma/client';
 import { hash, verify } from 'argon2';
+import { getPaginationData } from 'src/common/utils/pagination';
 import { OrganizationMembersService } from '../organization-members/organization-members.service';
 import { OrganizationsService } from '../organizations/organizations.service';
 import { UsersService } from '../users/users.service';
@@ -15,9 +16,12 @@ import { TokensService } from '../utils/tokens/tokens.service';
 import { TokenType } from '../utils/tokens/types/params';
 import { OrganizationInviteTokenPayload } from '../utils/tokens/types/payloads';
 import { CreateOrganizationInviteInput } from './dto/create-organization-invite.input';
+import { OrganizationInvitesInput } from './dto/organization-invites.input';
 import { ProcessOrganizationInviteInput } from './dto/process-organization-invite.input';
 import { VerifyOrganizationInviteInput } from './dto/verify-organization-invite.input';
+import { GqlOrganizationInvite } from './entities/organization-invite.entity';
 import { CreateOrganizationInvitePayload } from './payload/create-organization-invite.payload';
+import { OrganizationInvitesPayload } from './payload/organization-invites.payload';
 import { VerifyOrganizationInvitePayload } from './payload/verify-organization-invite.payload';
 
 @Injectable()
@@ -142,5 +146,35 @@ export class OrganizationInvitesService {
         data: { status: InviteStatus.ACCEPTED },
       });
     });
+  }
+
+  async one(inviteId: string): Promise<GqlOrganizationInvite> {
+    return await this.prismaService.organizationInvite.findUnique({
+      where: { id: inviteId },
+      select: { id: true, role: true, name: true, status: true },
+    });
+  }
+
+  async list(
+    input: OrganizationInvitesInput,
+  ): Promise<OrganizationInvitesPayload> {
+    const invitesCount = await this.prismaService.organizationInvite.count({
+      where: { organizationId: input.organizationId },
+    });
+
+    const { meta, skip } = getPaginationData(
+      invitesCount,
+      input.page,
+      input.limit,
+    );
+
+    const invites = await this.prismaService.organizationInvite.findMany({
+      where: { organizationId: input.organizationId },
+      select: { id: true, name: true, role: true, status: true },
+      skip,
+      take: input.limit,
+    });
+
+    return { meta, invites };
   }
 }

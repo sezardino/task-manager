@@ -6,8 +6,8 @@ registerEnumType(UserRole, { name: 'UserRole' });
 
 @ObjectType()
 class Organization extends OmitType(GqlOrganization, [
-  'members',
   'owner',
+  'membersCount',
 ] as const) {}
 
 @ObjectType()

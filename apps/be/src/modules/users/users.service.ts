@@ -2,9 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { hash } from 'argon2';
 import { PrismaService } from '../utils/prisma/prisma.service';
+import { PrismaTransaction } from '../utils/prisma/types';
 import { CreateUserInput } from './dto/create-user.input';
 import { GqlUser } from './entities/user.entity';
-import { PrismaTransaction } from '../utils/prisma/types';
 
 @Injectable()
 export class UsersService {
@@ -37,18 +37,15 @@ export class UsersService {
       where: { id: userId },
       include: {
         organizationsOwned: true,
-        organizationMemberships: {
-          include: { organization: true, user: true },
-        },
+        organizationMemberships: { include: { organization: true } },
       },
     });
 
     return {
       ...user,
-      organizationMemberships: user.organizationMemberships.map((member) => ({
-        id: member.organization.id,
-        name: member.organization.name,
-      })),
+      organizationMemberships: user.organizationMemberships.map(
+        (o) => o.organization,
+      ),
     };
   }
 

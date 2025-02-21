@@ -1,7 +1,7 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Member {
+export class Owner {
   @Field()
   id: string;
 
@@ -23,9 +23,9 @@ export class GqlOrganization {
   @Field()
   name: string;
 
-  @Field(() => Member)
-  owner: Member;
+  @Field(() => Owner)
+  owner: Owner;
 
-  @Field(() => [Member])
-  members: Member[];
+  @Field(() => Int)
+  membersCount: number;
 }

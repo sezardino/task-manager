@@ -1,6 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { InviteStatus } from '@prisma/client';
-import { GqlOrganization } from 'src/modules/organizations/entities/organization.entity';
+import { InviteStatus, OrganizationRole } from '@prisma/client';
 
 registerEnumType(InviteStatus, { name: 'InviteStatus' });
 
@@ -12,6 +11,9 @@ export class GqlOrganizationInvite {
   @Field()
   name: string;
 
-  @Field(() => GqlOrganization)
-  organization: GqlOrganization;
+  @Field(() => InviteStatus)
+  status: InviteStatus;
+
+  @Field(() => OrganizationRole)
+  role: OrganizationRole;
 }

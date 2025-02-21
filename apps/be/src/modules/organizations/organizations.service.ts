@@ -18,29 +18,16 @@ export class OrganizationsService {
         owner: { connect: { id: userId } },
         members: { create: { role: OrganizationRole.OWNER, userId } },
       },
+
       include: {
-        members: {
-          include: {
-            user: {
-              include: {
-                organizationMemberships: true,
-                organizationsOwned: true,
-              },
-            },
-          },
-        },
+        _count: { select: { members: true } },
         owner: true,
       },
     });
 
     return {
       ...organization,
-      members: organization.members.map((m) => ({
-        id: m.user.id,
-        email: m.user.email,
-        firstName: m.user.firstName,
-        lastName: m.user.lastName,
-      })),
+      membersCount: organization._count.members,
     };
   }
 
