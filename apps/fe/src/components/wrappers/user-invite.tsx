@@ -78,6 +78,9 @@ export const UserInviteWrapper = (props: UserInviteWrapper) => {
             />
           </div>
           <DialogFooter>
+            <Button size={"sm"} variant={"secondary"} onClick={closeHandler}>
+              Cancel
+            </Button>
             <Button form={inviteFormId} size={"sm"} type="submit">
               Create invite
             </Button>
@@ -103,7 +106,9 @@ export const UserInviteWrapper = (props: UserInviteWrapper) => {
             />
           </div>
           <DialogFooter>
-            <Button className="justify-self-center">Close</Button>
+            <Button className="justify-self-center" onClick={closeHandler}>
+              Close
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
