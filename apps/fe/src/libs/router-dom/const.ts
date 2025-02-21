@@ -1,3 +1,7 @@
+export const ApplicationSearchParams = {
+  inviteToken: "invite-token",
+};
+
 export const ApplicationPageParams = {
   organizationId: "organizationId",
 };
@@ -7,6 +11,7 @@ export const ApplicationUrls = Object.freeze({
     index: "/auth",
     login: "/auth/login",
     registration: "/auth/registration",
+    organizationInvite: "/auth/organization-invite",
   },
   landing: {
     index: "/",

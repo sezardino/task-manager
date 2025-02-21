@@ -18,3 +18,13 @@ export type OrganizationInvitesPayload = GQLPayload<{
 export type OrganizationInvitesInput = PaginationInput & {
   organizationId: string;
 };
+
+export type InviteUserPayload = GQLPayload<{
+  createOrganizationInvite: { token: string };
+}>;
+
+export type InviteUserInput = {
+  organizationId: string;
+  name: string;
+  role: OrganizationRole;
+};

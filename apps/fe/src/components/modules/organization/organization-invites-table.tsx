@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableProps } from "@/components/ui/data-table";
 import { DEFAULT_DATE_FORMAT } from "@/const/date-format";
+import { INVITE_STATUSES_COPY } from "@/const/invite-statuses-copy";
 import { ORGANIZATION_ROLES_COPY } from "@/const/organization-roles-copy";
 import { InviteStatus, OrganizationRole } from "@/types/enums";
 import { ColumnDef } from "@tanstack/react-table";
@@ -70,7 +71,7 @@ export const OrganizationInvitesTable = (
                     : undefined
               }
             >
-              {ORGANIZATION_ROLES_COPY[row.original.role]}
+              {INVITE_STATUSES_COPY[row.original.status]}
             </Badge>
             {row.original.decideAt &&
               dayjs(row.original.decideAt).format(DEFAULT_DATE_FORMAT)}
