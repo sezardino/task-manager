@@ -87,4 +87,5 @@ enum OrganizationRole {
 enum UserRole {
   OWNER
   MEMBER
+  MODERATOR
 }

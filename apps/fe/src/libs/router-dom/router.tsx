@@ -2,6 +2,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { currentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { AuthLayout } from "@/layouts/auth";
 import { OnboardingLayout } from "@/layouts/onboarding";
+import { OrganizationLayout } from "@/layouts/organization";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { getFromCacheOrFetch } from "../react-query";
@@ -14,6 +15,8 @@ const RegistrationPage = lazy(() => import("@/pages/auth/registration"));
 const OnboardingPage = lazy(() => import("@/pages/onboarding/index"));
 
 const OrganizationPage = lazy(() => import("@/pages/organization/index"));
+const InvitesPage = lazy(() => import("@/pages/organization/invites"));
+const MembersPage = lazy(() => import("@/pages/organization/members"));
 
 const LandingPage = lazy(() => import("@/pages/landing/index"));
 
@@ -88,11 +91,23 @@ export const router = createBrowserRouter([
       },
       {
         path: ApplicationUrls.application.organization.index(),
-        Component: () => <Outlet />,
+        Component: () => (
+          <OrganizationLayout>
+            <Outlet />
+          </OrganizationLayout>
+        ),
         children: [
           {
             path: ApplicationUrls.application.organization.index(),
             Component: OrganizationPage,
+          },
+          {
+            path: ApplicationUrls.application.organization.invites(),
+            Component: InvitesPage,
+          },
+          {
+            path: ApplicationUrls.application.organization.members(),
+            Component: MembersPage,
           },
         ],
       },

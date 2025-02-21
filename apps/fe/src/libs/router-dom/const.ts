@@ -1,3 +1,7 @@
+export const ApplicationPageParams = {
+  organizationId: "organizationId",
+};
+
 export const ApplicationUrls = Object.freeze({
   auth: {
     index: "/auth",
@@ -10,7 +14,11 @@ export const ApplicationUrls = Object.freeze({
   application: {
     index: "/app",
     organization: {
-      index: (id = ":organizationId") => `/${id}`,
+      index: (id = `:${ApplicationPageParams.organizationId}`) => `/${id}`,
+      members: (id = `:${ApplicationPageParams.organizationId}`) =>
+        `/${id}/members`,
+      invites: (id = `:${ApplicationPageParams.organizationId}`) =>
+        `/${id}/invites`,
     },
   },
   onboarding: {
