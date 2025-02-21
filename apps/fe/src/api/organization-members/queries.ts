@@ -1,4 +1,4 @@
-export const ORGANIZATION_MUTATION_QUERY = `
+export const ORGANIZATION_MEMBERS_QUERY = `
 query OrganizationMembers($input: OrganizationMembersInput) {
   organizationMembers(input: $input) {
     meta {

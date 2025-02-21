@@ -17,7 +17,9 @@ export class OrganizationsResolver {
   }
 
   @Query(() => OrganizationMembersPayload)
-  organizationMembers(@Args('input') input: OrganizationMembersInput) {
+  organizationMembers(
+    @Args('input', { nullable: true }) input?: OrganizationMembersInput,
+  ) {
     return this.organizationMembersService.list(input);
   }
 }
