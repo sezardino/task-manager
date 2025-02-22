@@ -17,13 +17,13 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 
-export type UserInviteWrapper = {
+export type UserInviteWrapperProps = {
   isOpen: boolean;
   onClose: () => void;
   organizationId: string;
 };
 
-export const UserInviteWrapper = (props: UserInviteWrapper) => {
+export const UserInviteWrapper = (props: UserInviteWrapperProps) => {
   const { organizationId, isOpen, onClose } = props;
   const inviteFormId = useId();
 

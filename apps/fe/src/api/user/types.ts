@@ -17,7 +17,7 @@ export type OrganizationUser = {
   firstName: string | null;
   lastName: string | null;
   userRole: UserRole;
-  memberRole: OrganizationRole;
+  organizationRole: OrganizationRole;
 };
 
 export type OrganizationUsersPayload = GQLPayload<{

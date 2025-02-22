@@ -1,5 +1,6 @@
-import { ParseUUIDPipe } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { isMongoId } from 'class-validator';
 import { CreateOrganizationInviteInput } from './dto/create-organization-invite.input';
 import { OrganizationInvitesInput } from './dto/organization-invites.input';
 import { ProcessOrganizationInviteInput } from './dto/process-organization-invite.input';
@@ -8,8 +9,8 @@ import { GqlOrganizationInvite } from './entities/organization-invite.entity';
 import { OrganizationInvitesService } from './organization-invites.service';
 import { CreateOrganizationInvitePayload } from './payload/create-organization-invite.payload';
 import { OrganizationInvitesPayload } from './payload/organization-invites.payload';
-import { VerifyOrganizationInvitePayload } from './payload/verify-organization-invite.payload';
 import { ProcessOrganizationInvitePayload } from './payload/process-organization-invite.payload';
+import { VerifyOrganizationInvitePayload } from './payload/verify-organization-invite.payload';
 
 @Resolver(() => GqlOrganizationInvite)
 export class OrganizationInvitesResolver {
@@ -42,7 +43,10 @@ export class OrganizationInvitesResolver {
   }
 
   @Query(() => GqlOrganizationInvite)
-  organizationInvite(@Args('inviteId', ParseUUIDPipe) inviteId: string) {
+  organizationInvite(@Args('inviteId') inviteId: string) {
+    if (!isMongoId(inviteId))
+      throw new BadRequestException('Invite id should be mongo id object');
+
     return this.organizationInvitesService.one(inviteId);
   }
 

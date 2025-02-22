@@ -5,6 +5,7 @@ export const ApplicationSearchParams = {
 
 export const ApplicationPageParams = {
   organizationId: "organizationId",
+  projectId: "projectId",
 };
 
 export const ApplicationUrls = Object.freeze({
@@ -19,12 +20,23 @@ export const ApplicationUrls = Object.freeze({
   },
   application: {
     index: "/app",
+    organizations: "/organizations",
     organization: {
-      index: (id = `:${ApplicationPageParams.organizationId}`) => `/${id}`,
-      members: (id = `:${ApplicationPageParams.organizationId}`) =>
-        `/${id}/members`,
-      invites: (id = `:${ApplicationPageParams.organizationId}`) =>
-        `/${id}/invites`,
+      index: (id = `:${ApplicationPageParams.organizationId}`) =>
+        `${ApplicationUrls.application.organizations}/${id}`,
+      members: (id?: string) =>
+        `${ApplicationUrls.application.organization.index(id)}/members`,
+      invites: (id?: string) =>
+        `${ApplicationUrls.application.organization.index(id)}/invites`,
+      projects: (id?: string) =>
+        `${ApplicationUrls.application.organization.index(id)}/projects`,
+      project: {
+        index: (
+          id = `:${ApplicationPageParams.projectId}`,
+          organizationId?: string
+        ) =>
+          `${ApplicationUrls.application.organization.projects(organizationId)}/${id}`,
+      },
     },
   },
   onboarding: {

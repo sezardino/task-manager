@@ -1,13 +1,13 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsUUID } from 'class-validator';
+import { IsMongoId } from 'class-validator';
 
 @InputType()
 export class OneProjectInput {
   @Field()
-  @IsUUID()
+  @IsMongoId()
   organizationId: string;
 
   @Field()
-  @IsUUID()
+  @IsMongoId()
   projectId: string;
 }

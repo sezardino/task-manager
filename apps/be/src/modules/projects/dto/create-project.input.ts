@@ -1,17 +1,18 @@
-import { Field, InputType, PickType } from '@nestjs/graphql';
-import { IsUUID } from 'class-validator';
-import { GqlProject } from '../entities/project.entity';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsMongoId, IsOptional, IsString } from 'class-validator';
 
 @InputType()
-export class CreateProjectInput extends PickType(GqlProject, [
-  'name',
-  'description',
-] as const) {
+export class CreateProjectInput {
   @Field()
-  @IsUUID()
+  @IsMongoId()
   organizationId: string;
 
   @Field()
-  @IsUUID()
-  ownerId: string;
+  @IsString()
+  name: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  description?: string;
 }

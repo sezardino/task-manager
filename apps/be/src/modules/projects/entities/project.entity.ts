@@ -1,5 +1,5 @@
 import { Field, ObjectType, OmitType } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { GqlUser } from 'src/modules/users/entities/user.entity';
 
 @ObjectType()
@@ -11,7 +11,7 @@ class GqlProjectOwner extends OmitType(GqlUser, [
 @ObjectType()
 export class GqlProject {
   @Field()
-  @IsUUID()
+  @IsMongoId()
   id: string;
 
   @Field()

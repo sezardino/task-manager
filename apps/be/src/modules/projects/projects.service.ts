@@ -12,13 +12,16 @@ import { OneProjectPayload } from './payload/one-project.payload';
 export class ProjectsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(input: CreateProjectInput): Promise<CreateObjectPayload> {
+  async create(
+    ownerId: string,
+    input: CreateProjectInput,
+  ): Promise<CreateObjectPayload> {
     return await this.prismaService.project.create({
       data: {
         name: input.name,
         description: input.description,
         organization: { connect: { id: input.organizationId } },
-        owner: { connect: { id: input.ownerId } },
+        owner: { connect: { id: ownerId } },
       },
       include: { owner: true },
     });

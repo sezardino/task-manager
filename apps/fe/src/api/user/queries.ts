@@ -1,29 +1,31 @@
 export const CURRENT_USER_QUERY = `
-  query CurrentUser {
-    user {
-      id
-      email
-      role
-    }
+query CurrentUser {
+  user {
+    id
+    email
+    role
+  }
 }
 `;
 
 export const ORGANIZATION_USERS_QUERY = `
-organizationUsers(input: $input) {
-  meta {
-    totalCount
-    page
-    limit
-    totalPages
-  }
-  users {
-    userId
-    memberId
-    email
-    firstName
-    lastName
-    userRole
-    organizationRole
+query OrganizationUsers($input: OrganizationUsersInput!) {
+  organizationUsers(input: $input) {
+    meta {
+      totalCount
+      page
+      limit
+      totalPages
+    }
+    users {
+      userId
+      memberId
+      email
+      firstName
+      lastName
+      userRole
+      organizationRole
+    }
   }
 }
 `;

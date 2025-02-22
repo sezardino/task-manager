@@ -1,14 +1,14 @@
 import { OrganizationUser } from "@/api/user/types";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableProps } from "@/components/ui/data-table";
-import { USER_ROLES_COPY } from "@/const/user-roles-copy";
+import { ORGANIZATION_ROLES_COPY } from "@/const/organization-roles-copy";
 import { OrganizationRole } from "@/types/enums";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 
 type TableData = Pick<
   OrganizationUser,
-  "email" | "firstName" | "lastName" | "memberRole"
+  "email" | "firstName" | "lastName" | "organizationRole"
 >;
 
 export type OrganizationMembersTableProps = Omit<
@@ -47,12 +47,12 @@ export const OrganizationMembersTable = (
         cell: ({ row }) => (
           <Badge
             variant={
-              row.original.memberRole !== OrganizationRole.OWNER
+              row.original.organizationRole !== OrganizationRole.OWNER
                 ? "secondary"
                 : undefined
             }
           >
-            {USER_ROLES_COPY[row.original.memberRole]}
+            {ORGANIZATION_ROLES_COPY[row.original.organizationRole]}
           </Badge>
         ),
       },

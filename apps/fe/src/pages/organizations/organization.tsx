@@ -1,5 +1,5 @@
 const OrganizationPage = () => {
-  return <main>organization</main>;
+  return <main>OrganizationPage</main>;
 };
 
 export default OrganizationPage;

@@ -21,13 +21,20 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 
-import { LogOut, Rabbit, UserPlus, Users } from "lucide-react";
-import { useMemo } from "react";
+import {
+  LogOut,
+  LucideProps,
+  Rabbit,
+  SquareChartGantt,
+  UserPlus,
+  Users,
+} from "lucide-react";
+import { ForwardRefExoticComponent, RefAttributes, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 
 export const OrganizationSidebar = () => {
   const { data: user } = useCurrentUserQuery();
-  // const location = useLocation();
+
   const params = useParams();
   const logout = useForceLogout();
   const organizationId = params[ApplicationPageParams.organizationId];
@@ -48,6 +55,17 @@ export const OrganizationSidebar = () => {
     [organizationId]
   );
 
+  const restLinks = useMemo(
+    () => [
+      {
+        title: "Projects",
+        icon: SquareChartGantt,
+        href: ApplicationUrls.application.organization.projects(organizationId),
+      },
+    ],
+    [organizationId]
+  );
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -59,28 +77,10 @@ export const OrganizationSidebar = () => {
       <SidebarContent>
         {[UserRole.OWNER, UserRole.ADMIN].includes(
           user?.role || UserRole.MEMBER
-        ) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Owner</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {ownerLinks.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={location.pathname === item.href}
-                    >
-                      <Link to={item.href}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+        ) && <MenuGroup label="Owner" links={ownerLinks} />}
+
+        <MenuGroup links={restLinks} />
+
         <SidebarFooter className="mt-auto">
           <ul className="flex items-center justify-center gap-2">
             <li>
@@ -98,5 +98,45 @@ export const OrganizationSidebar = () => {
         </SidebarFooter>
       </SidebarContent>
     </Sidebar>
+  );
+};
+
+type MenuGroupLink = {
+  title: string;
+  href: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+};
+
+type MenuGroupProps = {
+  label?: string;
+  links: MenuGroupLink[];
+};
+
+const MenuGroup = (props: MenuGroupProps) => {
+  const { label, links } = props;
+
+  return (
+    <SidebarGroup>
+      {!!label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {links.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton
+                asChild
+                isActive={location.pathname === item.href}
+              >
+                <Link to={item.href}>
+                  <item.icon />
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 };

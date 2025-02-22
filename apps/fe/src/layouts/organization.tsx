@@ -6,7 +6,7 @@ export const OrganizationLayout = ({ children }: PropsWithChildren) => {
   return (
     <WithSidebarLayout>
       <OrganizationSidebar />
-      {children}
+      <div className="w-full">{children}</div>
     </WithSidebarLayout>
   );
 };

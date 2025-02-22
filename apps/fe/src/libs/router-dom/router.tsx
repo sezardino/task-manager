@@ -17,9 +17,15 @@ const OrganizationInvitePage = lazy(
 
 const OnboardingPage = lazy(() => import("@/pages/onboarding/index"));
 
-const OrganizationPage = lazy(() => import("@/pages/organization/index"));
-const InvitesPage = lazy(() => import("@/pages/organization/invites"));
-const MembersPage = lazy(() => import("@/pages/organization/members"));
+const OrganizationsPage = lazy(() => import("@/pages/organizations/index"));
+const OrganizationPage = lazy(
+  () => import("@/pages/organizations/organization")
+);
+const InvitesPage = lazy(() => import("@/pages/organizations/invites"));
+const MembersPage = lazy(() => import("@/pages/organizations/members"));
+
+const ProjectsPage = lazy(() => import("@/pages/projects/index"));
+const ProjectPage = lazy(() => import("@/pages/projects/project"));
 
 const LandingPage = lazy(() => import("@/pages/landing/index"));
 
@@ -97,13 +103,17 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: ApplicationUrls.application.organization.index(),
+        path: ApplicationUrls.application.organizations,
         Component: () => (
           <OrganizationLayout>
             <Outlet />
           </OrganizationLayout>
         ),
         children: [
+          {
+            index: true,
+            Component: OrganizationsPage,
+          },
           {
             path: ApplicationUrls.application.organization.index(),
             Component: OrganizationPage,
@@ -115,6 +125,24 @@ export const router = createBrowserRouter([
           {
             path: ApplicationUrls.application.organization.members(),
             Component: MembersPage,
+          },
+        ],
+      },
+      {
+        path: ApplicationUrls.application.organization.projects(),
+        Component: () => (
+          <OrganizationLayout>
+            <Outlet />
+          </OrganizationLayout>
+        ),
+        children: [
+          {
+            index: true,
+            Component: ProjectsPage,
+          },
+          {
+            path: ApplicationUrls.application.organization.project.index(),
+            Component: ProjectPage,
           },
         ],
       },
