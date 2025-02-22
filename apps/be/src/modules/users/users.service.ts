@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { UserRole } from '@prisma/client';
 import { hash } from 'argon2';
 import { PrismaService } from '../utils/prisma/prisma.service';
+import { PrismaTransaction } from '../utils/prisma/types';
 import { CreateUserInput } from './dto/create-user.input';
 import { GqlUser } from './entities/user.entity';
 
@@ -16,17 +18,50 @@ export class UsersService {
 
     return this.prismaService.user.findUnique({
       where: { email: dto.email, id: dto.id },
-      select: { id: true, email: true, password: true },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        _count: {
+          select: {
+            organizationsOwned: true,
+          },
+        },
+      },
     });
   }
 
   async findOne(userId: string): Promise<GqlUser> {
-    return this.prismaService.user.findUnique({ where: { id: userId } });
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      include: {
+        organizationsOwned: true,
+        organizationMemberships: { include: { organization: true } },
+      },
+    });
+
+    return {
+      ...user,
+      organizationMemberships: user.organizationMemberships.map(
+        (o) => o.organization,
+      ),
+    };
   }
 
-  async create(input: CreateUserInput) {
-    return this.prismaService.user.create({
-      data: { email: input.email, password: await hash(input.password) },
+  async createUser(
+    input: CreateUserInput,
+    role: UserRole,
+    trx?: PrismaTransaction,
+  ) {
+    const prisma = trx ? trx : this.prismaService;
+
+    return prisma.user.create({
+      data: {
+        email: input.email,
+        password: await hash(input.password),
+        role,
+      },
     });
   }
 }

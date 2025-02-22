@@ -15,6 +15,7 @@
   "description": "",
   "packageManager": "npm@10.8.1",
   "devDependencies": {
-    "turbo": "^2.4.2"
+    "turbo": "^2.4.2",
+    "vite": "^6.1.0"
   }
 }

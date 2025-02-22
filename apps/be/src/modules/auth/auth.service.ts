@@ -4,6 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { UserRole } from '@prisma/client';
 import { verify } from 'argon2';
 import { UsersService } from '../users/users.service';
 import { TokensService } from '../utils/tokens/tokens.service';
@@ -52,18 +53,22 @@ export class AuthService {
     if (!isPasswordMatch) throw new BadRequestException('Wrong credentials');
 
     const atPayload: AccessTokenPayload = {
-      sub: { email: user.email, userId: user.id },
+      sub: { email: user.email, userId: user.id, role: user.role },
     };
     const rtPayload: RefreshTokenPayload = {
-      sub: { email: user.email, userId: user.id },
+      sub: { email: user.email, userId: user.id, role: user.role },
     };
 
     const tokens = await this.generateTokens(atPayload, rtPayload);
-
+    console.log(user);
     return {
       email: user.email,
       accessToken: tokens.access,
       refreshToken: tokens.refresh,
+      onboarding:
+        user.role === UserRole.MEMBER
+          ? false
+          : user._count.organizationsOwned === 0,
     };
   }
 
@@ -72,7 +77,7 @@ export class AuthService {
 
     if (user) throw new ConflictException('This email already in use');
 
-    return this.usersService.create(input);
+    return this.usersService.createUser(input, UserRole.OWNER);
   }
 
   async validateTokenUser(userId: string): Promise<UserInRequest> {
@@ -89,10 +94,10 @@ export class AuthService {
     if (!user) throw new BadRequestException('Wrong credentials');
 
     const atPayload: AccessTokenPayload = {
-      sub: { email: user.email, userId: user.id },
+      sub: { email: user.email, userId: user.id, role: user.role },
     };
     const rtPayload: RefreshTokenPayload = {
-      sub: { email: user.email, userId: user.id },
+      sub: { email: user.email, userId: user.id, role: user.role },
     };
 
     const tokens = await this.generateTokens(atPayload, rtPayload);

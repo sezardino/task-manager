@@ -1,8 +1,9 @@
 import { ForbiddenError } from '@nestjs/apollo';
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { accessTokenConfig } from './config/access-token.config';
+import { organizationInviteTokenConfig } from './config/organization-invite-token.config';
 import { refreshTokenConfig } from './config/refresh-token.config';
 import { GenerateTokenParams, TokenType } from './types/params';
 
@@ -18,6 +19,10 @@ export class TokensService {
     private readonly refreshTokenConfiguration: ConfigType<
       typeof refreshTokenConfig
     >,
+    @Inject(organizationInviteTokenConfig.KEY)
+    private readonly organizationInviteTokenConfiguration: ConfigType<
+      typeof organizationInviteTokenConfig
+    >,
   ) {}
 
   private getConfig(type: TokenType) {
@@ -26,6 +31,8 @@ export class TokensService {
         return this.accessTokenConfiguration;
       case TokenType.refresh:
         return this.refreshTokenConfiguration;
+      case TokenType.organizationInvite:
+        return this.organizationInviteTokenConfiguration;
 
       default:
         throw new ForbiddenError('Token type not provided');
@@ -39,5 +46,19 @@ export class TokensService {
       { ...payload, type },
       this.getConfig(type),
     );
+  }
+
+  async verify<Payload>(token: string, type: TokenType): Promise<Payload> {
+    try {
+      const payload = await this.jwtService.verifyAsync(
+        token,
+        this.getConfig(type),
+      );
+
+      return payload;
+    } catch (error) {
+      console.log(error);
+      throw new ForbiddenException('Invalid or expired token');
+    }
   }
 }

@@ -2,9 +2,8 @@ import {
   RegistrationForm,
   RegistrationFormValues,
 } from "@/components/forms/registration";
-import { LOGIN_EMAIL_SEARCH_PARAM } from "@/const/search-params";
 import { useRegistrationMutation } from "@/hooks/tanstack/mutations/user/register";
-import { ApplicationUrls } from "@/libs/router-dom";
+import { ApplicationSearchParams, ApplicationUrls } from "@/libs/router-dom";
 import { useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -25,7 +24,10 @@ const RegistrationPage = () => {
           ApplicationUrls.auth.login,
           window.location.origin
         );
-        redirectURL.searchParams.set(LOGIN_EMAIL_SEARCH_PARAM, response.email);
+        redirectURL.searchParams.set(
+          ApplicationSearchParams.loginEmail,
+          response.email
+        );
 
         navigate(redirectURL.pathname + redirectURL.search);
       } catch (e) {

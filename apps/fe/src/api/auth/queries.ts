@@ -4,6 +4,7 @@ export const LOGIN_MUTATION_QUERY = `
       email
       accessToken
       refreshToken
+      onboarding
     }
   }
 `;

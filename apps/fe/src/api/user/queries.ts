@@ -3,6 +3,7 @@ export const CURRENT_USER_QUERY = `
     user {
       id
       email
+      role
     }
 }
 `;
