@@ -32,11 +32,9 @@ export const CardsList = <T extends ListItem>(props: CardsListProps<T>) => {
       {isLoading && <Spinner className="mx-auto mt-10" />}
 
       {hasItems && (
-        <ul>
+        <ul className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {items.map((item) => (
-            <li key={item.id} className="odd:bg-[#1c1c1c] ">
-              {render({ ...item })}
-            </li>
+            <li key={item.id}>{render({ ...item })}</li>
           ))}
         </ul>
       )}

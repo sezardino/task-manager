@@ -1,6 +1,8 @@
 import { Spinner } from "@/components/ui/spinner";
 import { currentUserQuery } from "@/hooks/tanstack/query/user/current-user";
+import { ApplicationLayout } from "@/layouts/application";
 import { AuthLayout } from "@/layouts/auth";
+import { LandingLayout } from "@/layouts/landing";
 import { OnboardingLayout } from "@/layouts/onboarding";
 import { OrganizationLayout } from "@/layouts/organization";
 import { lazy, Suspense } from "react";
@@ -84,7 +86,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ApplicationUrls.landing.index,
-        Component: () => <Outlet />,
+        Component: () => (
+          <LandingLayout>
+            <Outlet />
+          </LandingLayout>
+        ),
         children: [
           {
             path: ApplicationUrls.landing.index,
@@ -94,26 +100,27 @@ export const router = createBrowserRouter([
       },
       {
         path: ApplicationUrls.application.index,
-        Component: () => <Outlet />,
-        children: [
-          {
-            path: ApplicationUrls.application.index,
-            Component: () => <h1>App</h1>,
-          },
-        ],
+        Component: () => (
+          <ApplicationLayout>
+            <h1>App</h1>
+          </ApplicationLayout>
+        ),
       },
       {
         path: ApplicationUrls.application.organizations,
+        Component: () => (
+          <ApplicationLayout>
+            <OrganizationsPage />
+          </ApplicationLayout>
+        ),
+      },
+      {
         Component: () => (
           <OrganizationLayout>
             <Outlet />
           </OrganizationLayout>
         ),
         children: [
-          {
-            index: true,
-            Component: OrganizationsPage,
-          },
           {
             path: ApplicationUrls.application.organization.index(),
             Component: OrganizationPage,

@@ -19,7 +19,7 @@ export const ApplicationUrls = Object.freeze({
     index: "/",
   },
   application: {
-    index: "/app",
+    index: "/dashboard",
     organizations: "/organizations",
     organization: {
       index: (id = `:${ApplicationPageParams.organizationId}`) =>

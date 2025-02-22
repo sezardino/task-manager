@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,27 +12,27 @@ import { ComponentPropsWithoutRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const OnboardingFormSchema = z.object({
+export const OrganizationFormSchema = z.object({
   name: z.string({ required_error: "Organization name is required field" }),
 });
 
-export type OnboardingFormValues = z.infer<typeof OnboardingFormSchema>;
+export type OrganizationFormValues = z.infer<typeof OrganizationFormSchema>;
 
 type OmittedProps = Omit<ComponentPropsWithoutRef<"form">, "onSubmit">;
-export type OnboardingFormProps = OmittedProps & {
-  onSubmit: (values: OnboardingFormValues) => Promise<void>;
+export type OrganizationFormProps = OmittedProps & {
+  onSubmit: (values: OrganizationFormValues) => Promise<void>;
   error?: string;
 };
 
-export const OnboardingForm = (props: OnboardingFormProps) => {
+export const OrganizationForm = (props: OrganizationFormProps) => {
   const { error, onSubmit, className, ...rest } = props;
 
-  const form = useForm<OnboardingFormValues>({
-    resolver: zodResolver(OnboardingFormSchema),
+  const form = useForm<OrganizationFormValues>({
+    resolver: zodResolver(OrganizationFormSchema),
     mode: "all",
   });
 
-  const submitHandler = (values: OnboardingFormValues) => {
+  const submitHandler = (values: OrganizationFormValues) => {
     onSubmit(values);
   };
 
@@ -65,14 +64,6 @@ export const OnboardingForm = (props: OnboardingFormProps) => {
         {typeof error === "string" && (
           <p className="text-destructive text-sm text-center">{error}</p>
         )}
-
-        <Button
-          type="submit"
-          disabled={form.formState.isSubmitting}
-          className="mt-2 w-full"
-        >
-          Create organization
-        </Button>
       </form>
     </Form>
   );

@@ -1,19 +1,21 @@
 import {
-  OnboardingForm,
-  OnboardingFormValues,
-} from "@/components/forms/onboarding";
-import { useOnboardingMutation } from "@/hooks/tanstack/mutations/onboarding/onboarding";
+  OrganizationForm,
+  OrganizationFormValues,
+} from "@/components/forms/organization";
+import { Button } from "@/components/ui/button";
+import { useCreateOrganizationMutation } from "@/hooks/tanstack/mutations/organization/create-organization";
 import { ApplicationUrls } from "@/libs/router-dom";
-import { useCallback } from "react";
+import { useCallback, useId } from "react";
 import { useNavigate } from "react-router-dom";
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
+  const formId = useId();
 
-  const { mutateAsync: onboarding, error } = useOnboardingMutation();
+  const { mutateAsync: onboarding, error } = useCreateOrganizationMutation();
 
   const onboardingHandler = useCallback(
-    async (values: OnboardingFormValues) => {
+    async (values: OrganizationFormValues) => {
       try {
         const response = await onboarding(values);
 
@@ -35,11 +37,16 @@ const OnboardingPage = () => {
         <h2 className="text-lg font-bold text-center">
           Enter organization information
         </h2>
-        <OnboardingForm
+        <OrganizationForm
+          id={formId}
           onSubmit={onboardingHandler}
           error={error?.message || undefined}
           className="mt-4"
         />
+
+        <Button form={formId} type="submit" className="mt-4">
+          Complete onboarding
+        </Button>
       </section>
     </main>
   );

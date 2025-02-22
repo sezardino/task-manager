@@ -61,7 +61,7 @@ export class OrganizationsService {
     const { limit, page } = input;
 
     const where: Prisma.OrganizationWhereInput = {
-      members: { some: { id: userId } },
+      members: { some: { userId } },
     };
 
     const count = await this.prismaService.organization.count({
@@ -71,7 +71,11 @@ export class OrganizationsService {
     const { meta, skip } = getPaginationData(count, page, limit);
 
     const organizations = await this.prismaService.organization.findMany({
-      include: { owner: true, _count: { select: { members: true } } },
+      include: {
+        owner: true,
+        _count: { select: { members: true } },
+        members: true,
+      },
       where,
       skip,
       take: limit,
