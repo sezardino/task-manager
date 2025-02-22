@@ -150,7 +150,11 @@ export class OrganizationInvitesService {
           id: payload.sub.inviteId,
           organizationId: payload.sub.organizationId,
         },
-        data: { status: InviteStatus.USER_ACCEPT, decideAt: new Date() },
+        data: {
+          status: InviteStatus.USER_ACCEPT,
+          decideAt: new Date(),
+          acceptedBy: { connect: { id: user.id } },
+        },
       });
 
       return user;
