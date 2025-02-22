@@ -9,6 +9,7 @@ import { OrganizationInvitesService } from './organization-invites.service';
 import { CreateOrganizationInvitePayload } from './payload/create-organization-invite.payload';
 import { OrganizationInvitesPayload } from './payload/organization-invites.payload';
 import { VerifyOrganizationInvitePayload } from './payload/verify-organization-invite.payload';
+import { ProcessOrganizationInvitePayload } from './payload/process-organization-invite.payload';
 
 @Resolver(() => GqlOrganizationInvite)
 export class OrganizationInvitesResolver {
@@ -24,7 +25,7 @@ export class OrganizationInvitesResolver {
     return this.organizationInvitesService.create(input);
   }
 
-  @Mutation(() => VerifyOrganizationInvitePayload)
+  @Query(() => VerifyOrganizationInvitePayload)
   verifyOrganizationInvite(
     @Args('input')
     input: VerifyOrganizationInviteInput,
@@ -32,7 +33,7 @@ export class OrganizationInvitesResolver {
     return this.organizationInvitesService.verify(input);
   }
 
-  @Mutation(() => VerifyOrganizationInvitePayload)
+  @Mutation(() => ProcessOrganizationInvitePayload, { nullable: true })
   processOrganizationInvite(
     @Args('input')
     input: ProcessOrganizationInviteInput,

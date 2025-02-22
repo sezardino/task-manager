@@ -1,7 +1,6 @@
 import { LoginForm, LoginFormValues } from "@/components/forms/login";
-import { LOGIN_EMAIL_SEARCH_PARAM } from "@/const/search-params";
 import { useLoginMutation } from "@/hooks/tanstack/mutations/auth/login";
-import { ApplicationUrls } from "@/libs/router-dom";
+import { ApplicationSearchParams, ApplicationUrls } from "@/libs/router-dom";
 import { useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -38,7 +37,8 @@ const LoginPage = () => {
       <LoginForm
         onSubmit={loginHandler}
         initialValues={{
-          email: searchParams.get(LOGIN_EMAIL_SEARCH_PARAM) || undefined,
+          email:
+            searchParams.get(ApplicationSearchParams.loginEmail) || undefined,
         }}
         error={error?.message || undefined}
       />

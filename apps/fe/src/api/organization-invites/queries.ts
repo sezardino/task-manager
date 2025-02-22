@@ -27,3 +27,25 @@ query OrganizationInvites($input: OrganizationInvitesInput) {
 }
 
 `;
+
+export const VERIFY_ORGANIZATION_INVITE_QUERY = `
+query VerifyOrganizationInvite($input: VerifyOrganizationInviteInput!) {
+  verifyOrganizationInvite(input: $input) {
+    members
+    name
+    createdAt
+    owner {
+      email
+      firstName
+      lastName
+    }
+  }
+}
+`;
+
+export const PROCESS_ORGANIZATION_INVITE_QUERY = `
+mutation ProcessOrganizationInvite($input: ProcessOrganizationInviteInput!) {
+  processOrganizationInvite(input: $input) {
+    email
+  }
+}`;

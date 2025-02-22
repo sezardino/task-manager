@@ -11,6 +11,9 @@ import { ApplicationUrls } from "./const";
 const AuthPage = lazy(() => import("@/pages/auth/index"));
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const RegistrationPage = lazy(() => import("@/pages/auth/registration"));
+const OrganizationInvitePage = lazy(
+  () => import("@/pages/auth/organization-invite")
+);
 
 const OnboardingPage = lazy(() => import("@/pages/onboarding/index"));
 
@@ -52,6 +55,10 @@ export const router = createBrowserRouter([
           {
             path: ApplicationUrls.auth.registration,
             Component: RegistrationPage,
+          },
+          {
+            path: ApplicationUrls.auth.organizationInvite,
+            Component: OrganizationInvitePage,
           },
         ],
       },

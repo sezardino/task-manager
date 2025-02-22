@@ -28,3 +28,33 @@ export type InviteUserInput = {
   name: string;
   role: OrganizationRole;
 };
+
+export type VerifyOrganizationInvitePayload = GQLPayload<{
+  verifyOrganizationInvite: {
+    members: number;
+    name: string;
+    createdAt: string;
+    owner: {
+      email: string;
+      firstName: string | null;
+      lastName: string | null;
+    };
+  };
+}>;
+
+export type VerifyOrganizationInviteInput = {
+  token: string;
+};
+
+export type ProcessOrganizationInvitePayload = GQLPayload<{
+  processOrganizationInvite: {
+    email: string;
+  };
+}>;
+
+export type ProcessOrganizationInviteInput = {
+  token: string;
+  accept: boolean;
+  email?: string;
+  password?: string;
+};

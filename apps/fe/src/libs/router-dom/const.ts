@@ -1,5 +1,6 @@
 export const ApplicationSearchParams = {
   inviteToken: "invite-token",
+  loginEmail: "email",
 };
 
 export const ApplicationPageParams = {

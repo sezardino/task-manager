@@ -1,4 +1,10 @@
-import { Field, Int, ObjectType, PickType } from '@nestjs/graphql';
+import {
+  Field,
+  GraphQLISODateTime,
+  Int,
+  ObjectType,
+  PickType,
+} from '@nestjs/graphql';
 import { GqlOrganization } from 'src/modules/organizations/entities/organization.entity';
 
 @ObjectType()
@@ -9,4 +15,7 @@ export class VerifyOrganizationInvitePayload extends PickType(GqlOrganization, [
 ] as const) {
   @Field(() => Int)
   members: number;
+
+  @Field(() => GraphQLISODateTime)
+  createdAt: Date;
 }

@@ -22,6 +22,7 @@ import { VerifyOrganizationInviteInput } from './dto/verify-organization-invite.
 import { GqlOrganizationInvite } from './entities/organization-invite.entity';
 import { CreateOrganizationInvitePayload } from './payload/create-organization-invite.payload';
 import { OrganizationInvitesPayload } from './payload/organization-invites.payload';
+import { ProcessOrganizationInvitePayload } from './payload/process-organization-invite.payload';
 import { VerifyOrganizationInvitePayload } from './payload/verify-organization-invite.payload';
 
 @Injectable()
@@ -76,7 +77,7 @@ export class OrganizationInvitesService {
         id: payload.sub.inviteId,
         organizationId: payload.sub.organizationId,
       },
-      select: { status: true, token: true, role: true },
+      select: { status: true, token: true, role: true, createdAt: true },
     });
 
     if (!invite) throw new NotFoundException('Invite not found');
@@ -95,12 +96,18 @@ export class OrganizationInvitesService {
   async verify(
     input: VerifyOrganizationInviteInput,
   ): Promise<VerifyOrganizationInvitePayload> {
-    const { payload } = await this.validateInviteToken(input.token);
+    const { payload, invite } = await this.validateInviteToken(input.token);
 
-    return this.organizationsService.preview(payload.sub.organizationId);
+    const organizationPreview = await this.organizationsService.preview(
+      payload.sub.organizationId,
+    );
+
+    return { ...organizationPreview, createdAt: invite.createdAt };
   }
 
-  async process(input: ProcessOrganizationInviteInput) {
+  async process(
+    input: ProcessOrganizationInviteInput,
+  ): Promise<ProcessOrganizationInvitePayload | null> {
     if (input.accept && (!input.email || !input.password))
       throw new BadRequestException('Email or password not provided');
     if (!input.accept && (input.email || input.password))
@@ -119,10 +126,10 @@ export class OrganizationInvitesService {
         data: { status: InviteStatus.USER_REJECT, decideAt: new Date() },
       });
 
-      return;
+      return null;
     }
 
-    this.prismaService.$transaction(async (trx) => {
+    const user = await this.prismaService.$transaction(async (trx) => {
       const user = await this.usersService.createUser(
         { email: input.email, password: input.password },
         UserRole.MEMBER,
@@ -145,7 +152,11 @@ export class OrganizationInvitesService {
         },
         data: { status: InviteStatus.USER_ACCEPT, decideAt: new Date() },
       });
+
+      return user;
     });
+
+    return { email: user.email };
   }
 
   async one(inviteId: string): Promise<GqlOrganizationInvite> {

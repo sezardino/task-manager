@@ -9,6 +9,6 @@ export const organizationInviteTokenConfig = registerAs(
   ORGANIZATION_INVITE_TOKEN_CONFIG_KEY,
   (): JwtSignOptions => ({
     secret: process.env.ORGANIZATION_INVITE_TOKEN_SECRET,
-    expiresIn: ORGANIZATION_INVITE_EXPIRATION_DAYS,
+    expiresIn: `${ORGANIZATION_INVITE_EXPIRATION_DAYS}d`,
   }),
 );
