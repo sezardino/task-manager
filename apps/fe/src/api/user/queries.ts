@@ -7,3 +7,36 @@ export const CURRENT_USER_QUERY = `
     }
 }
 `;
+
+export const ORGANIZATION_USERS_QUERY = `
+organizationUsers(input: $input) {
+  meta {
+    totalCount
+    page
+    limit
+    totalPages
+  }
+  users {
+    userId
+    memberId
+    email
+    firstName
+    lastName
+    userRole
+    organizationRole
+  }
+}
+`;
+
+export const ORGANIZATION_USER_QUERY = `
+query OrganizationUser($input: OrganizationUserInput!) {
+  organizationUser(input: $input) {
+    userId
+    memberId
+    email
+    firstName
+    lastName
+    userRole
+  }
+}
+`;

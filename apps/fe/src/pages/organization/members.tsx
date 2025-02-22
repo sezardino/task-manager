@@ -2,17 +2,16 @@ import { OrganizationMembersTable } from "@/components/modules/organization/orga
 import { Button } from "@/components/ui/button";
 import { PaginationWidget } from "@/components/ui/pagination-widget";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useOrganizationMembersQuery } from "@/hooks/tanstack/query/organization-members/organization-members";
+import { useOrganizationUsersQuery } from "@/hooks/tanstack/query/user/organization-users";
 import { ApplicationPageParams, ApplicationUrls } from "@/libs/router-dom";
 import { Link, useParams } from "react-router-dom";
 
 const MembersPage = () => {
   const params = useParams();
   const organizationId = params[ApplicationPageParams.organizationId] as string;
-  const { data: members, isLoading: isMembersLoading } =
-    useOrganizationMembersQuery({
-      organizationId,
-    });
+  const { data: users, isLoading: isUsersLoading } = useOrganizationUsersQuery({
+    organizationId,
+  });
 
   return (
     <main className="container py-10">
@@ -32,19 +31,19 @@ const MembersPage = () => {
         </Button>
       </header>
 
-      {!isMembersLoading && (
+      {!isUsersLoading && (
         <section className="mt-10">
-          <OrganizationMembersTable data={members?.members || []} />
+          <OrganizationMembersTable data={users?.users || []} />
           <PaginationWidget
             onPageChange={() => {}}
-            page={members?.meta.page || 1}
-            totalPages={members?.meta.totalPages || 1}
+            page={users?.meta.page || 1}
+            totalPages={users?.meta.totalPages || 1}
             className="mt-10"
           />
         </section>
       )}
 
-      {isMembersLoading && (
+      {isUsersLoading && (
         <section className="mt-10">
           <Skeleton className="h-96" />
           <Skeleton className="mt-2 h-10" />
