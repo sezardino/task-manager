@@ -18,10 +18,13 @@ model User {
   role     UserRole @default(MEMBER)
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updatedAt")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   organizationsOwned      Organization[]       @relation("owner")
   organizationMemberships OrganizationMember[]
+
+  projectMemberships ProjectMember[]
+  projectsOwned      Project[]       @relation("ProjectOwner")
 
   acceptedInvite   OrganizationInvite? @relation(fields: [acceptedInviteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   acceptedInviteId String?             @unique @map("accepted_invite_id") @db.ObjectId
@@ -37,8 +40,11 @@ model Organization {
   owner   User   @relation("owner", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   members OrganizationMember[]
-
   invites OrganizationInvite[]
+
+  projects Project[]
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("organizations")
 }
@@ -51,6 +57,8 @@ model OrganizationMember {
 
   user         User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("organization_members")
 }
@@ -75,6 +83,38 @@ model OrganizationInvite {
   @@map("organization_invites")
 }
 
+model Project {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String?
+  organizationId String  @map("organization_id") @db.ObjectId
+  ownerId        String  @map("owner_id") @db.ObjectId
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  owner        User         @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  members ProjectMember[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String      @map("user_id") @db.ObjectId
+  projectId String      @map("project_id") @db.ObjectId
+  role      ProjectRole
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  project Project @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("project_members")
+}
+
 enum InviteStatus {
   PENDING
   USER_ACCEPT
@@ -92,4 +132,10 @@ enum UserRole {
   OWNER
   MEMBER
   ADMIN
+}
+
+enum ProjectRole {
+  OWNER
+  MANAGER
+  MEMBER
 }
