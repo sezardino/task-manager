@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { getPaginationData } from 'src/common/utils/pagination';
+import { OrganizationUserInput } from '../users/dto/organization-user.input';
+import { OrganizationUsersInput } from '../users/dto/organization-users.input';
+import { OrganizationUserPayload } from '../users/payloads/organization-user.payload';
+import { OrganizationUsersPayload } from '../users/payloads/organization-users.payload';
 import { PrismaService } from '../utils/prisma/prisma.service';
 import { PrismaTransaction } from '../utils/prisma/types';
 import { CreateOrganizationMemberInput } from './dto/create-organization-member.input';
-import { OrganizationMembersInput } from './dto/organization-members.input';
-import { GqlOrganizationMember } from './entities/organization-member.entity';
-import { OrganizationMembersPayload } from './payload/organization-members.payload';
 
 @Injectable()
 export class OrganizationMembersService {
@@ -23,49 +24,63 @@ export class OrganizationMembersService {
     });
   }
 
-  async one(memberId: string): Promise<GqlOrganizationMember> {
-    const member = await this.prismaService.organizationMember.findUnique({
-      where: { id: memberId },
+  async one(input: OrganizationUserInput): Promise<OrganizationUserPayload> {
+    const { organizationId, userId } = input;
+
+    const member = await this.prismaService.organizationMember.findFirst({
+      where: { userId, organizationId },
       include: {
-        user: { select: { email: true, lastName: true, firstName: true } },
+        user: {
+          select: {
+            id: true,
+            email: true,
+            lastName: true,
+            firstName: true,
+            role: true,
+          },
+        },
       },
     });
 
+    if (!member) throw new NotFoundException('Organization user not found');
+
     return {
-      id: member.id,
-      role: member.role,
+      userId: member.user.id,
       email: member.user.email,
       firstName: member.user.firstName,
       lastName: member.user.lastName,
+      userRole: member.user.role,
+      memberId: member.id,
+      organizationRole: member.role,
     };
   }
 
-  async list(
-    input: OrganizationMembersInput,
-  ): Promise<OrganizationMembersPayload> {
+  async list(input: OrganizationUsersInput): Promise<OrganizationUsersPayload> {
+    const { limit, page, organizationId } = input;
+
     const membersCount = await this.prismaService.organizationMember.count({
-      where: { organizationId: input.organizationId },
+      where: { organizationId: organizationId },
     });
 
-    const { meta, skip } = getPaginationData(
-      membersCount,
-      input.page,
-      input.limit,
-    );
+    const { meta, skip } = getPaginationData(membersCount, page, limit);
 
     const members = await this.prismaService.organizationMember.findMany({
-      where: { organizationId: input.organizationId },
+      where: { organizationId: organizationId },
       include: { user: true },
       skip,
-      take: input.limit,
+      take: limit,
     });
 
     const formattedMembers = members.map((m) => ({
-      id: m.id,
-      ...m.user,
-      role: m.role,
+      email: m.user.email,
+      firstName: m.user.firstName,
+      userRole: m.user.role,
+      lastName: m.user.lastName,
+      userId: m.user.id,
+      memberId: m.id,
+      organizationRole: m.role,
     }));
 
-    return { meta, members: formattedMembers };
+    return { meta, users: formattedMembers };
   }
 }
