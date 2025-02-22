@@ -21,7 +21,6 @@ const ProjectsPage = () => {
           Here you can found all projects that are available for you
         </p>
       </header>
-      {JSON.stringify({ params })}
 
       <section className="mt-10">
         <CardsList
@@ -37,7 +36,9 @@ const ProjectsPage = () => {
             </div>
           }
           items={projectsData?.projects || []}
-          render={(i) => <ProjectCard />}
+          render={(project) => (
+            <ProjectCard organizationId={organizationId} project={project} />
+          )}
         />
       </section>
     </main>

@@ -10,3 +10,11 @@ export type OrganizationEntity = {
   name: string;
   membersCount: number;
 };
+
+export type ProjectEntity = {
+  id: string;
+  name: string;
+  description: string;
+  owner: Pick<UserEntity, "email" | "firstName" | "lastName">;
+  membersCount: number;
+};

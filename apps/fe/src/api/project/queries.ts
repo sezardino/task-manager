@@ -20,6 +20,7 @@ query OrganizationProjects($input: AllProjectsInput!) {
       id
       name
       description
+      membersCount
       owner {
         email
         firstName

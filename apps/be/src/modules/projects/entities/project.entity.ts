@@ -1,4 +1,4 @@
-import { Field, ObjectType, OmitType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, OmitType } from '@nestjs/graphql';
 import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { GqlUser } from 'src/modules/users/entities/user.entity';
 
@@ -26,4 +26,7 @@ export class GqlProject {
 
   @Field(() => GqlProjectOwner, { nullable: true })
   owner: GqlProjectOwner;
+
+  @Field(() => Int)
+  membersCount: number;
 }

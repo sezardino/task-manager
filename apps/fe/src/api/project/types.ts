@@ -1,3 +1,4 @@
+import { ProjectEntity } from "@/types/entity";
 import { GQLPayload } from "@/types/gql";
 import { PaginationInput, PaginationPayload } from "@/types/pagination";
 
@@ -8,7 +9,7 @@ export type CreateProjectInput = {
 };
 
 export type CreateProjectPayload = GQLPayload<{
-  createProject: { id: string; name: string };
+  createProject: Pick<ProjectEntity, "id" | "name">;
 }>;
 
 export type OrganizationProjectsInput = PaginationInput & {
@@ -16,7 +17,12 @@ export type OrganizationProjectsInput = PaginationInput & {
 };
 
 export type OrganizationProjectsPayload = GQLPayload<{
-  projects: PaginationPayload & { projects: { id: string; name: string }[] };
+  projects: PaginationPayload & {
+    projects: Pick<
+      ProjectEntity,
+      "id" | "name" | "description" | "membersCount" | "owner"
+    >[];
+  };
 }>;
 
 export type OrganizationProjectInput = {
@@ -25,5 +31,5 @@ export type OrganizationProjectInput = {
 };
 
 export type OrganizationProjectPayload = GQLPayload<{
-  project: { id: string; name: string };
+  project: Pick<ProjectEntity, "id" | "name">;
 }>;

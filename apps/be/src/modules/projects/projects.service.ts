@@ -16,15 +16,20 @@ export class ProjectsService {
     ownerId: string,
     input: CreateProjectInput,
   ): Promise<CreateObjectPayload> {
-    return await this.prismaService.project.create({
+    const project = await this.prismaService.project.create({
       data: {
         name: input.name,
         description: input.description,
         organization: { connect: { id: input.organizationId } },
         owner: { connect: { id: ownerId } },
       },
-      include: { owner: true },
+      include: { owner: true, _count: { select: { members: true } } },
     });
+
+    return {
+      ...project,
+      membersCount: project._count.members,
+    };
   }
 
   async findAll(input: AllProjectsInput): Promise<AllProjectsPayload> {
@@ -38,14 +43,19 @@ export class ProjectsService {
 
     const projects = await this.prismaService.project.findMany({
       where: { organizationId },
-      include: { owner: true },
+      include: { owner: true, _count: { select: { members: true } } },
       skip,
       take: limit,
     });
 
+    const formattedProjects = projects.map((p) => ({
+      ...p,
+      membersCount: p._count.members,
+    }));
+
     return {
       meta,
-      projects,
+      projects: formattedProjects,
     };
   }
 
@@ -54,11 +64,11 @@ export class ProjectsService {
 
     const project = await this.prismaService.project.findFirst({
       where: { organizationId, id: projectId },
-      include: { owner: true },
+      include: { owner: true, _count: { select: { members: true } } },
     });
 
     if (!project) throw new NotFoundException('Project not found');
 
-    return project;
+    return { ...project, membersCount: project._count.members };
   }
 }
