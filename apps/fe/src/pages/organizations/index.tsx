@@ -9,7 +9,7 @@ const OrganizationsPage = () => {
     useOrganizationsListQuery({});
 
   return (
-    <main className="container py-10">
+    <main className="container mx-auto py-10">
       <header className="flex items-center gap-3 justify-between">
         <div>
           <h1 className="text-2xl font-bold">Organizations</h1>

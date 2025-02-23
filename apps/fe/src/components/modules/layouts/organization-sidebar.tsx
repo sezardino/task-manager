@@ -16,6 +16,7 @@ import {
 } from "@radix-ui/react-tooltip";
 
 import {
+  Home,
   LogOut,
   Rabbit,
   SquareChartGantt,
@@ -33,6 +34,22 @@ export const OrganizationSidebar = () => {
   const logout = useForceLogout();
   const organizationId = params[ApplicationPageParams.organizationId];
 
+  const mainLinks = useMemo(
+    () => [
+      {
+        title: "Home",
+        icon: Home,
+        href: ApplicationUrls.application.organization.index(organizationId),
+      },
+      {
+        title: "Projects",
+        icon: SquareChartGantt,
+        href: ApplicationUrls.application.organization.projects(organizationId),
+      },
+    ],
+    [organizationId]
+  );
+
   const ownerLinks = useMemo(
     () => [
       {
@@ -49,31 +66,20 @@ export const OrganizationSidebar = () => {
     [organizationId]
   );
 
-  const restLinks = useMemo(
-    () => [
-      {
-        title: "Projects",
-        icon: SquareChartGantt,
-        href: ApplicationUrls.application.organization.projects(organizationId),
-      },
-    ],
-    [organizationId]
-  );
-
   return (
     <Sidebar>
       <SidebarHeader>
         <Link to={ApplicationUrls.application.index}>
-          <Rabbit className="size-9 inline" />
+          <Rabbit className="size-9 inline text-muted-foreground" />
           <span className="ml-2 text-lg font-bold">Task manager</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarMenuWidget label="Main" links={mainLinks} />
+
         {[UserRole.OWNER, UserRole.ADMIN].includes(
           user?.role || UserRole.MEMBER
-        ) && <SidebarMenuWidget label="Owner" links={ownerLinks} />}
-
-        <SidebarMenuWidget links={restLinks} />
+        ) && <SidebarMenuWidget label="Manage" links={ownerLinks} />}
 
         <SidebarFooter className="mt-auto">
           <ul className="flex items-center justify-center gap-2">
