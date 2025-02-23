@@ -5,6 +5,7 @@ import { AuthLayout } from "@/layouts/auth";
 import { LandingLayout } from "@/layouts/landing";
 import { OnboardingLayout } from "@/layouts/onboarding";
 import { OrganizationLayout } from "@/layouts/organization";
+import { ProjectLayout } from "@/layouts/project";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { getFromCacheOrFetch } from "../react-query";
@@ -138,9 +139,9 @@ export const router = createBrowserRouter([
       {
         path: ApplicationUrls.application.organization.projects(),
         Component: () => (
-          <OrganizationLayout>
+          <ProjectLayout>
             <Outlet />
-          </OrganizationLayout>
+          </ProjectLayout>
         ),
         children: [
           {

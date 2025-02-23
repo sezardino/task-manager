@@ -1,5 +1,9 @@
 import { fetchGQL } from "@/utils/fetch-gql";
-import { CREATE_PROJECT_QUERY, ORGANIZATION_PROJECTS_QUERY } from "./queries";
+import {
+  CREATE_PROJECT_QUERY,
+  ORGANIZATION_PROJECT_QUERY,
+  ORGANIZATION_PROJECTS_QUERY,
+} from "./queries";
 import {
   CreateProjectInput,
   CreateProjectPayload,
@@ -26,7 +30,7 @@ export class ProjectApiService {
 
   static one(input: OrganizationProjectInput) {
     return fetchGQL<OrganizationProjectPayload>({
-      query: ORGANIZATION_PROJECTS_QUERY,
+      query: ORGANIZATION_PROJECT_QUERY,
       variables: { input },
     }).then((r) => r.data.data.project);
   }

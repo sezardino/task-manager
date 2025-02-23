@@ -5,54 +5,39 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { useCurrentUserQuery } from "@/hooks/tanstack/query/user/current-user";
+import { TruncatedTypography } from "@/components/ui/typography";
+import { useOrganizationProjectQuery } from "@/hooks/tanstack/query/project/one";
 import { useForceLogout } from "@/hooks/use-force-logout";
 import { ApplicationPageParams, ApplicationUrls } from "@/libs/router-dom";
-import { UserRole } from "@/types/enums";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 
-import {
-  LogOut,
-  Rabbit,
-  SquareChartGantt,
-  UserPlus,
-  Users,
-} from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { LogOut, Rabbit, SquareChartGantt } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SidebarMenuWidget } from "./sidebar-menu-widget";
 
-export const OrganizationSidebar = () => {
-  const { data: user } = useCurrentUserQuery();
-
+export const ProjectSidebar = () => {
   const params = useParams();
-  const logout = useForceLogout();
-  const organizationId = params[ApplicationPageParams.organizationId];
+  const organizationId = params[ApplicationPageParams.organizationId] as string;
+  const projectId = params[ApplicationPageParams.projectId] as string;
 
-  const ownerLinks = useMemo(
-    () => [
-      {
-        title: "Users",
-        icon: Users,
-        href: ApplicationUrls.application.organization.members(organizationId),
-      },
-      {
-        title: "Invites",
-        icon: UserPlus,
-        href: ApplicationUrls.application.organization.invites(organizationId),
-      },
-    ],
-    [organizationId]
-  );
+  const { data: projectData, isLoading: isProjectDataLoading } =
+    useOrganizationProjectQuery({
+      projectId,
+      organizationId,
+    });
+
+  const logout = useForceLogout();
 
   const restLinks = useMemo(
     () => [
       {
-        title: "Projects",
+        title: "Board",
         icon: SquareChartGantt,
         href: ApplicationUrls.application.organization.projects(organizationId),
       },
@@ -63,16 +48,26 @@ export const OrganizationSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link to={ApplicationUrls.application.index}>
-          <Rabbit className="size-9 inline" />
-          <span className="ml-2 text-lg font-bold">Task manager</span>
-        </Link>
+        {!isProjectDataLoading && (
+          <Link
+            to={ApplicationUrls.application.organization.project.index(
+              projectId,
+              organizationId
+            )}
+          >
+            <Rabbit className="size-9 inline" />
+            <TruncatedTypography
+              level="span"
+              text={projectData?.name}
+              className="ml-2 text-lg font-bold inline"
+            />
+          </Link>
+        )}
+        {isProjectDataLoading && (
+          <Skeleton className="w-full h-10 inline ml-2" />
+        )}
       </SidebarHeader>
       <SidebarContent>
-        {[UserRole.OWNER, UserRole.ADMIN].includes(
-          user?.role || UserRole.MEMBER
-        ) && <SidebarMenuWidget label="Owner" links={ownerLinks} />}
-
         <SidebarMenuWidget links={restLinks} />
 
         <SidebarFooter className="mt-auto">
