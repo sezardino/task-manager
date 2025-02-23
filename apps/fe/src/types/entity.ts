@@ -1,3 +1,5 @@
+import { TaskStatus } from "./enums";
+
 export type UserEntity = {
   id: string;
   email: string;
@@ -17,4 +19,12 @@ export type ProjectEntity = {
   description: string;
   owner: Pick<UserEntity, "email" | "firstName" | "lastName">;
   membersCount: number;
+};
+
+export type TaskEntity = {
+  assignee: Pick<UserEntity, "email" | "firstName" | "lastName">;
+  id: string;
+  title: string;
+  description: string | null;
+  status: TaskStatus;
 };

@@ -53,7 +53,7 @@ export class TasksService {
       },
     });
 
-    return { id: task.id };
+    return task;
   }
 
   async findAll(input: TasksListInput): Promise<TasksListPayload> {
@@ -107,6 +107,6 @@ export class TasksService {
       },
     });
 
-    return { id: updatedTask.id };
+    return updatedTask;
   }
 }

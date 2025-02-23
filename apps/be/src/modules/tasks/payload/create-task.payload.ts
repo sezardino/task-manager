@@ -4,4 +4,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class CreateTaskPayload {
   @Field()
   id: string;
+
+  @Field()
+  title: string;
 }
