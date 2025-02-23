@@ -2,10 +2,10 @@ import { Field, InputType } from '@nestjs/graphql';
 import { PaginationInput } from 'src/common/input/pagination.input';
 
 @InputType()
-export class OrganizationUsersInput extends PaginationInput {
+export class ProjectUsersInput extends PaginationInput {
   @Field()
   organizationId: string;
 
-  @Field({ nullable: true })
-  notInProjectId?: string;
+  @Field()
+  projectId: string;
 }

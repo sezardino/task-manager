@@ -36,6 +36,11 @@ export const ApplicationUrls = Object.freeze({
           organizationId?: string
         ) =>
           `${ApplicationUrls.application.organization.projects(organizationId)}/${id}`,
+        users: (
+          id = `:${ApplicationPageParams.projectId}`,
+          organizationId?: string
+        ) =>
+          `${ApplicationUrls.application.organization.projects(organizationId)}/${id}/users`,
       },
     },
   },

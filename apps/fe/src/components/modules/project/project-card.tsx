@@ -29,7 +29,7 @@ export const ProjectCard = (props: ProjectCardProps) => {
         <CardTitle>{project.name}</CardTitle>
         <CardDescription>{project.description}</CardDescription>
       </CardHeader>
-      <CardContent className="px-4">
+      <CardContent className="px-4 mt-auto">
         <UserData
           email={project.owner.email}
           firstName={project.owner.firstName}

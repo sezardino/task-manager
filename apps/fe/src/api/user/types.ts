@@ -32,7 +32,7 @@ export type OrganizationUserPayload = GQLPayload<{
   organizationUser: OrganizationUser;
 }>;
 
-export type OrganizationUserInput = PaginationInput & {
+export type OrganizationUserInput = {
   organizationId: string;
   userId: string;
 };

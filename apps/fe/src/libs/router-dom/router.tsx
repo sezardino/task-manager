@@ -27,8 +27,9 @@ const OrganizationPage = lazy(
 const InvitesPage = lazy(() => import("@/pages/organizations/invites"));
 const MembersPage = lazy(() => import("@/pages/organizations/members"));
 
-const ProjectsPage = lazy(() => import("@/pages/projects/index"));
+const ProjectsPage = lazy(() => import("@/pages/projects/projects"));
 const ProjectPage = lazy(() => import("@/pages/projects/project"));
+const ProjectMembersPage = lazy(() => import("@/pages/projects/members"));
 
 const LandingPage = lazy(() => import("@/pages/landing/index"));
 
@@ -134,10 +135,13 @@ export const router = createBrowserRouter([
             path: ApplicationUrls.application.organization.members(),
             Component: MembersPage,
           },
+          {
+            path: ApplicationUrls.application.organization.projects(),
+            Component: ProjectsPage,
+          },
         ],
       },
       {
-        path: ApplicationUrls.application.organization.projects(),
         Component: () => (
           <ProjectLayout>
             <Outlet />
@@ -145,12 +149,12 @@ export const router = createBrowserRouter([
         ),
         children: [
           {
-            index: true,
-            Component: ProjectsPage,
-          },
-          {
             path: ApplicationUrls.application.organization.project.index(),
             Component: ProjectPage,
+          },
+          {
+            path: ApplicationUrls.application.organization.project.users(),
+            Component: ProjectMembersPage,
           },
         ],
       },

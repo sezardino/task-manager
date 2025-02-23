@@ -16,3 +16,9 @@ export enum UserRole {
   MEMBER = "MEMBER",
   ADMIN = "ADMIN",
 }
+
+export enum ProjectRole {
+  OWNER = "OWNER",
+  MANAGER = "MANAGER",
+  MEMBER = "MEMBER",
+}

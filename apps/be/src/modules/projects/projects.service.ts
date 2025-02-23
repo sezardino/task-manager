@@ -5,7 +5,7 @@ import { AllProjectsInput } from './dto/all-projects.input';
 import { CreateProjectInput } from './dto/create-project.input';
 import { OneProjectInput } from './dto/one-project.input';
 import { AllProjectsPayload } from './payload/all-projects.payload';
-import { CreateObjectPayload } from './payload/create-project.payload';
+import { CreateProjectPayload } from './payload/create-project.payload';
 import { OneProjectPayload } from './payload/one-project.payload';
 
 @Injectable()
@@ -15,13 +15,23 @@ export class ProjectsService {
   async create(
     ownerId: string,
     input: CreateProjectInput,
-  ): Promise<CreateObjectPayload> {
+  ): Promise<CreateProjectPayload> {
+    const { name, organizationId, users, description } = input;
+
     const project = await this.prismaService.project.create({
       data: {
-        name: input.name,
-        description: input.description,
-        organization: { connect: { id: input.organizationId } },
+        name: name,
+        description: description,
+        organization: { connect: { id: organizationId } },
         owner: { connect: { id: ownerId } },
+        members: {
+          createMany: {
+            data: users.map((user) => ({
+              role: user.role,
+              userId: user.id,
+            })),
+          },
+        },
       },
       include: { owner: true, _count: { select: { members: true } } },
     });

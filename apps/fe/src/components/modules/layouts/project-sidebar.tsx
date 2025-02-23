@@ -16,7 +16,7 @@ import {
 } from "@radix-ui/react-tooltip";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { LogOut, Rabbit, SquareChartGantt } from "lucide-react";
+import { LogOut, Rabbit, SquareChartGantt, Users } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SidebarMenuWidget } from "./sidebar-menu-widget";
@@ -39,10 +39,21 @@ export const ProjectSidebar = () => {
       {
         title: "Board",
         icon: SquareChartGantt,
-        href: ApplicationUrls.application.organization.projects(organizationId),
+        href: ApplicationUrls.application.organization.project.index(
+          projectId,
+          organizationId
+        ),
+      },
+      {
+        title: "Users",
+        icon: Users,
+        href: ApplicationUrls.application.organization.project.users(
+          projectId,
+          organizationId
+        ),
       },
     ],
-    [organizationId]
+    [organizationId, projectId]
   );
 
   return (

@@ -9,6 +9,7 @@ import { GqlUser } from './entities/user.entity';
 import { OrganizationUserPayload } from './payloads/organization-user.payload';
 import { OrganizationUsersPayload } from './payloads/organization-users.payload';
 import { UsersService } from './users.service';
+import { ProjectUsersInput } from './dto/project-users.input';
 
 @Resolver(() => GqlUser)
 export class UsersResolver {
@@ -37,6 +38,11 @@ export class UsersResolver {
 
   @Query(() => OrganizationUsersPayload)
   organizationUsers(@Args('input') input: OrganizationUsersInput) {
+    return this.organizationMembersService.list(input);
+  }
+
+  @Query(() => OrganizationUsersPayload)
+  projectUsers(@Args('input') input: ProjectUsersInput) {
     return this.organizationMembersService.list(input);
   }
 }

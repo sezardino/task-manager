@@ -15,11 +15,18 @@ const ProjectsPage = () => {
 
   return (
     <main className="container py-10">
-      <header>
-        <h1 className="text-2xl font-bold">Projects</h1>
-        <p className="mt-2">
-          Here you can found all projects that are available for you
-        </p>
+      <header className="flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">Projects</h1>
+          <p className="mt-2">
+            Here you can found all projects that are available for you
+          </p>
+        </div>
+        <CreateProjectWrapper organizationId={organizationId}>
+          <Button size={"sm"} className="mt-5">
+            Create new project
+          </Button>
+        </CreateProjectWrapper>
       </header>
 
       <section className="mt-10">
@@ -37,7 +44,11 @@ const ProjectsPage = () => {
           }
           items={projectsData?.projects || []}
           render={(project) => (
-            <ProjectCard organizationId={organizationId} project={project} />
+            <ProjectCard
+              organizationId={organizationId}
+              project={project}
+              className="h-full"
+            />
           )}
         />
       </section>

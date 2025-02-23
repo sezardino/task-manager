@@ -1,5 +1,19 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsMongoId, IsOptional, IsString } from 'class-validator';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { ProjectRole } from '@prisma/client';
+import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
+
+registerEnumType(ProjectRole, { name: 'ProjectRole' });
+
+@InputType()
+class CreateProjectUser {
+  @Field()
+  @IsMongoId({ each: true })
+  id: string;
+
+  @Field(() => ProjectRole)
+  @IsEnum(ProjectRole)
+  role: ProjectRole;
+}
 
 @InputType()
 export class CreateProjectInput {
@@ -15,4 +29,7 @@ export class CreateProjectInput {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @Field(() => [CreateProjectUser])
+  users: CreateProjectUser[];
 }

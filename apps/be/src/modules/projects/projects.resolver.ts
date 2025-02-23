@@ -5,15 +5,15 @@ import { CreateProjectInput } from './dto/create-project.input';
 import { OneProjectInput } from './dto/one-project.input';
 import { GqlProject } from './entities/project.entity';
 import { AllProjectsPayload } from './payload/all-projects.payload';
-import { CreateObjectPayload } from './payload/create-project.payload';
 import { OneProjectPayload } from './payload/one-project.payload';
 import { ProjectsService } from './projects.service';
+import { CreateProjectPayload } from './payload/create-project.payload';
 
 @Resolver(() => GqlProject)
 export class ProjectsResolver {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  @Mutation(() => CreateObjectPayload)
+  @Mutation(() => CreateProjectPayload)
   createProject(
     @Args('input') input: CreateProjectInput,
     @CurrentUser('id') userId: string,

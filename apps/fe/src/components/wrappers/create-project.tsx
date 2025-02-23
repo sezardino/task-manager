@@ -1,4 +1,5 @@
 import { useCreateProjectMutation } from "@/hooks/tanstack/mutations/project/create";
+import { useOrganizationUsersQuery } from "@/hooks/tanstack/query/user/organization-users";
 import { ApplicationUrls } from "@/libs/router-dom";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { PropsWithChildren, useCallback, useId } from "react";
@@ -14,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
+import { Skeleton } from "../ui/skeleton";
 
 export type CreateProjectWrapperProps = PropsWithChildren & {
   organizationId: string;
@@ -23,6 +25,12 @@ export const CreateProjectWrapper = (props: CreateProjectWrapperProps) => {
   const { organizationId, children } = props;
   const navigate = useNavigate();
   const formId = useId();
+
+  const { data: organizationUsers, isLoading: isOrganizationUsersLoading } =
+    useOrganizationUsersQuery({
+      organizationId,
+      limit: 100,
+    });
 
   const {
     mutateAsync: create,
@@ -36,7 +44,10 @@ export const CreateProjectWrapper = (props: CreateProjectWrapperProps) => {
         const response = await create({ ...values, organizationId });
 
         navigate(
-          ApplicationUrls.application.organization.project.index(response.id)
+          ApplicationUrls.application.organization.project.index(
+            response.id,
+            organizationId
+          )
         );
       } catch (error) {
         console.log(error);
@@ -56,11 +67,20 @@ export const CreateProjectWrapper = (props: CreateProjectWrapperProps) => {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <ProjectForm
-            id={formId}
-            onSubmit={inviteHandler}
-            error={error?.message || undefined}
-          />
+          {!isOrganizationUsersLoading && organizationUsers?.users && (
+            <ProjectForm
+              id={formId}
+              onSubmit={inviteHandler}
+              users={
+                organizationUsers.users.map((u) => ({ ...u, id: u.userId })) ||
+                []
+              }
+              error={error?.message || undefined}
+            />
+          )}
+          {isOrganizationUsersLoading && (
+            <Skeleton className="w-full h-[500px]" />
+          )}
         </div>
         <DialogFooter>
           <DialogClose asChild disabled={isCreatePending}>
