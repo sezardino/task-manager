@@ -42,3 +42,26 @@ query OrganizationUser($input: OrganizationUserInput!) {
   }
 }
 `;
+
+export const PROJECT_USERS_QUERY = `
+query ProjectUsers($input: ProjectUsersInput!) {
+  projectUsers(input: $input) {
+    meta {
+      totalCount
+      page
+      limit
+      totalPages
+    }
+    users {
+      userId
+      memberId
+      email
+      firstName
+      lastName
+      userRole
+      organizationRole
+      projectRole
+    }
+  }
+}
+`;

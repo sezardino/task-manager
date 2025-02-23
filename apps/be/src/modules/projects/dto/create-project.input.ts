@@ -7,7 +7,7 @@ registerEnumType(ProjectRole, { name: 'ProjectRole' });
 @InputType()
 class CreateProjectUser {
   @Field()
-  @IsMongoId({ each: true })
+  @IsMongoId()
   id: string;
 
   @Field(() => ProjectRole)

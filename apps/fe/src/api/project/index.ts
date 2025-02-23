@@ -1,10 +1,13 @@
 import { fetchGQL } from "@/utils/fetch-gql";
 import {
+  ADD_MEMBERS_TO_PROJECT_QUERY,
   CREATE_PROJECT_QUERY,
   ORGANIZATION_PROJECT_QUERY,
   ORGANIZATION_PROJECTS_QUERY,
 } from "./queries";
 import {
+  AddMembersToProjectInput,
+  AddMembersToProjectPayload,
   CreateProjectInput,
   CreateProjectPayload,
   OrganizationProjectInput,
@@ -19,6 +22,13 @@ export class ProjectApiService {
       query: CREATE_PROJECT_QUERY,
       variables: { input },
     }).then((r) => r.data.data.createProject);
+  }
+
+  static addMembers(input: AddMembersToProjectInput) {
+    return fetchGQL<AddMembersToProjectPayload>({
+      query: ADD_MEMBERS_TO_PROJECT_QUERY,
+      variables: { input },
+    }).then((r) => r.data.data.addMembersToProject);
   }
 
   static list(input: OrganizationProjectsInput) {

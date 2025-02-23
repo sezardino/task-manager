@@ -38,3 +38,10 @@ query OrganizationProject($input: OneProjectInput!) {
     description
   }
 }`;
+
+export const ADD_MEMBERS_TO_PROJECT_QUERY = `
+mutation AddMembersToProject($input: AddUsersToProjectInput!) {
+  addMembersToProject(input: $input) {
+    usersCount
+  }
+}`;

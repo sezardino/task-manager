@@ -33,7 +33,7 @@ export const CreateOrganizationWrapper = (
     isPending: isCreatePending,
   } = useCreateOrganizationMutation();
 
-  const inviteHandler = useCallback(
+  const createHandler = useCallback(
     async (values: OrganizationFormValues) => {
       try {
         const response = await create({ ...values });
@@ -59,7 +59,7 @@ export const CreateOrganizationWrapper = (
         <div className="grid gap-4 py-4">
           <OrganizationForm
             id={formId}
-            onSubmit={inviteHandler}
+            onSubmit={createHandler}
             error={error?.message || undefined}
           />
         </div>

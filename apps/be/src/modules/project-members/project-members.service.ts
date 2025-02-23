@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ProjectRole } from '@prisma/client';
 import { getPaginationData } from 'src/common/utils/pagination';
+import { AddUsersToProjectPayload } from '../projects/payload/add-users-to-project.payload';
 import { ProjectUsersInput } from '../users/dto/project-users.input';
 import { ProjectUsersPayload } from '../users/payloads/project-users.payload';
 import { PrismaService } from '../utils/prisma/prisma.service';
@@ -14,8 +15,12 @@ import { AddUsersToProjectInput } from './dto/add-users-to-project.input';
 export class ProjectMembersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async addUsers(input: AddUsersToProjectInput) {
-    const { organizationId, projectId, userIds } = input;
+  async addUsers(
+    input: AddUsersToProjectInput,
+  ): Promise<AddUsersToProjectPayload> {
+    const { organizationId, projectId, users } = input;
+
+    const userIds = users.map((u) => u.id);
 
     const project = await this.prismaService.project.findFirst({
       where: { organizationId, id: projectId },
@@ -23,7 +28,7 @@ export class ProjectMembersService {
 
     if (!project) throw new NotFoundException('Project Not Found');
 
-    const users = await this.prismaService.user.findMany({
+    const usersList = await this.prismaService.user.findMany({
       where: {
         organizationMemberships: { some: { organizationId } },
         id: { in: userIds },
@@ -36,13 +41,20 @@ export class ProjectMembersService {
         'There are no users that belongs to this organization',
       );
 
+    const usersListIds = usersList.map((u) => u.id);
+    const checkedList = users.filter((u) => usersListIds.includes(u.id));
+
     await this.prismaService.projectMember.createMany({
-      data: users.map((u) => ({
+      data: checkedList.map((u) => ({
         userId: u.id,
         role: ProjectRole.MEMBER,
         projectId,
       })),
     });
+
+    return {
+      usersCount: checkedList.length,
+    };
   }
 
   async list(input: ProjectUsersInput): Promise<ProjectUsersPayload> {
@@ -61,7 +73,7 @@ export class ProjectMembersService {
       include: {
         user: {
           include: {
-            organizationMemberships: { where: { id: organizationId } },
+            organizationMemberships: { where: { organizationId } },
           },
         },
       },

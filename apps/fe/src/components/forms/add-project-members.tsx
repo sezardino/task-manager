@@ -6,7 +6,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { PROJECT_ROLES_COPY } from "@/const/project-roles-copy";
 import { UserEntity } from "@/types/entity";
 import { ProjectRole } from "@/types/enums";
@@ -25,22 +24,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Textarea } from "../ui/textarea";
 import { UserData } from "../ui/user-data";
 
-const PROJECT_ROLES = Object.values(ProjectRole).map((role) => ({
-  label: PROJECT_ROLES_COPY[role],
-  value: role,
-}));
+const PROJECT_ROLES = Object.values(ProjectRole)
+  .filter((r) => r !== ProjectRole.OWNER)
+  .map((role) => ({
+    label: PROJECT_ROLES_COPY[role],
+    value: role,
+  }));
 
 const DEFAULT_USER = {
   id: undefined as unknown as string,
   role: ProjectRole.MEMBER,
 };
 
-export const ProjectFormSchema = z.object({
-  name: z.string({ required_error: "Project name is required field" }),
-  description: z.string().optional(),
+export const AddProjectMembersFormSchema = z.object({
   users: z
     .array(
       z.object({
@@ -50,34 +48,32 @@ export const ProjectFormSchema = z.object({
         }),
       })
     )
-    .min(1, "You should select min 1 user")
-    .refine(
-      (users) => users.filter((u) => u.role === ProjectRole.OWNER).length === 1,
-      "One owner member should be specified"
-    ),
+    .min(1, "You should select min 1 user"),
 });
 
-export type ProjectFormValues = z.infer<typeof ProjectFormSchema>;
+export type AddProjectMembersFormValues = z.infer<
+  typeof AddProjectMembersFormSchema
+>;
 
 type OmittedProps = Omit<ComponentPropsWithoutRef<"form">, "onSubmit">;
-export type ProjectFormProps = OmittedProps & {
-  onSubmit: (values: ProjectFormValues) => Promise<void>;
+export type AddProjectMembersFormProps = OmittedProps & {
+  onSubmit: (values: AddProjectMembersFormValues) => Promise<void>;
   error?: string;
   users: Pick<UserEntity, "id" | "firstName" | "lastName" | "email">[];
 };
 
-export const ProjectForm = (props: ProjectFormProps) => {
+export const AddProjectMembersForm = (props: AddProjectMembersFormProps) => {
   const { users, error, onSubmit, className, ...rest } = props;
 
-  const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(ProjectFormSchema),
+  const form = useForm<AddProjectMembersFormValues>({
+    resolver: zodResolver(AddProjectMembersFormSchema),
     mode: "all",
     defaultValues: {
-      users: [{ id: undefined, role: ProjectRole.OWNER }],
+      users: [{ id: undefined, role: ProjectRole.MANAGER }],
     },
   });
 
-  const submitHandler = (values: ProjectFormValues) => {
+  const submitHandler = (values: AddProjectMembersFormValues) => {
     onSubmit(values);
   };
 
@@ -93,42 +89,6 @@ export const ProjectForm = (props: ProjectFormProps) => {
         className={cn("grid gap-4", className)}
         onSubmit={form.handleSubmit(submitHandler)}
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Project name</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  name="name"
-                  placeholder="Enter project name"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  name="description"
-                  placeholder="Describe the project"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <div className="flex flex-col">
           <ul className="relative products_name_price_desc">
             {fields.map((_, index, array) => (
@@ -185,15 +145,7 @@ export const ProjectForm = (props: ProjectFormProps) => {
                         <SelectContent>
                           {PROJECT_ROLES.map((role) => (
                             <SelectItem key={role.value} value={role.value}>
-                              <Badge
-                                variant={
-                                  role.value === ProjectRole.OWNER
-                                    ? "default"
-                                    : "secondary"
-                                }
-                              >
-                                {role.value}
-                              </Badge>
+                              <Badge variant={"secondary"}>{role.value}</Badge>
                             </SelectItem>
                           ))}
 

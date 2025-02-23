@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { getPaginationData } from 'src/common/utils/pagination';
 import { OrganizationUserInput } from '../users/dto/organization-user.input';
 import { OrganizationUsersInput } from '../users/dto/organization-users.input';
@@ -56,16 +57,27 @@ export class OrganizationMembersService {
   }
 
   async list(input: OrganizationUsersInput): Promise<OrganizationUsersPayload> {
-    const { limit, page, organizationId } = input;
+    const { limit, page, organizationId, notInProjectId } = input;
+
+    const where: Prisma.OrganizationMemberWhereInput = {
+      organizationId: organizationId,
+      ...(notInProjectId
+        ? {
+            user: {
+              projectMemberships: { none: { projectId: notInProjectId } },
+            },
+          }
+        : {}),
+    };
 
     const membersCount = await this.prismaService.organizationMember.count({
-      where: { organizationId: organizationId },
+      where,
     });
 
     const { meta, skip } = getPaginationData(membersCount, page, limit);
 
     const members = await this.prismaService.organizationMember.findMany({
-      where: { organizationId: organizationId },
+      where,
       include: { user: true },
       skip,
       take: limit,

@@ -6,7 +6,7 @@ export const ORGANIZATION_USER_QUERY_KEY = "ORGANIZATION_USER_QUERY_KEY";
 
 export const getOrganizationUserQuery = (input: OrganizationUserInput) => ({
   queryKey: [ORGANIZATION_USER_QUERY_KEY, ...Object.values(input)],
-  queryFn: () => UserApiService.one(input),
+  queryFn: () => UserApiService.organizationUser(input),
   retry: false,
 });
 
