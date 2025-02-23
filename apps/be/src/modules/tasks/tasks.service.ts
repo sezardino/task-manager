@@ -6,7 +6,6 @@ import { TasksListInput } from './dto/tasks-list.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { GqlTask } from './entities/task.entity';
 import { CreateTaskPayload } from './payload/create-task.payload';
-import { TasksListPayload } from './payload/tasks-list.payload';
 import { UpdateTaskPayload } from './payload/update-task.payload';
 
 type ValidateProjectInput = {
@@ -56,7 +55,7 @@ export class TasksService {
     return task;
   }
 
-  async findAll(input: TasksListInput): Promise<TasksListPayload> {
+  async findAll(input: TasksListInput): Promise<GqlTask[]> {
     const { organizationId, projectId } = input;
 
     await this.validateProject({ organizationId, projectId });
@@ -66,7 +65,7 @@ export class TasksService {
       include: { assignee: true },
     });
 
-    return { tasks };
+    return tasks;
   }
 
   async findOne(input: OneTasksInput): Promise<GqlTask> {

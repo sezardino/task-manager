@@ -1,5 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { TaskStatus } from '@prisma/client';
+import {
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 @InputType()
 export class CreateTaskInput {
@@ -8,10 +15,15 @@ export class CreateTaskInput {
   @IsNotEmpty()
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   description?: string;
+
+  @Field(() => TaskStatus, { nullable: true })
+  @IsEnum(TaskStatus)
+  @IsOptional()
+  status?: TaskStatus;
 
   @Field()
   @IsMongoId()

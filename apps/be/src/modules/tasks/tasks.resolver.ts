@@ -5,7 +5,6 @@ import { TasksListInput } from './dto/tasks-list.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { GqlTask } from './entities/task.entity';
 import { CreateTaskPayload } from './payload/create-task.payload';
-import { TasksListPayload } from './payload/tasks-list.payload';
 import { UpdateTaskPayload } from './payload/update-task.payload';
 import { TasksService } from './tasks.service';
 
@@ -18,7 +17,7 @@ export class TasksResolver {
     return this.tasksService.create(input);
   }
 
-  @Query(() => TasksListPayload, { name: 'tasks' })
+  @Query(() => [GqlTask], { name: 'tasks' })
   findAll(@Args('input') input: TasksListInput) {
     return this.tasksService.findAll(input);
   }

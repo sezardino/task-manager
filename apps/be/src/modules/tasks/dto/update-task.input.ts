@@ -12,22 +12,22 @@ export class UpdateTaskInput extends PickType(CreateTaskInput, [
   @IsMongoId()
   id: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   title?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   description?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsMongoId()
   @IsOptional()
   assigneeId?: string;
 
-  @Field(() => TaskStatus)
+  @Field(() => TaskStatus, { nullable: true })
   @IsEnum(TaskStatus)
   @IsOptional()
   status?: TaskStatus;

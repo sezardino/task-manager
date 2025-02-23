@@ -1,6 +1,5 @@
 import { useCreateOrganizationMutation } from "@/hooks/tanstack/mutations/organization/create-organization";
 import { ApplicationUrls } from "@/libs/router-dom";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 import { PropsWithChildren, useCallback, useId } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -16,6 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog";
 
 export type CreateOrganizationWrapperProps = PropsWithChildren;

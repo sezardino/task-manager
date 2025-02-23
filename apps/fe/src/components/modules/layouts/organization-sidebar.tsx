@@ -9,12 +9,12 @@ import { useCurrentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { useForceLogout } from "@/hooks/use-force-logout";
 import { ApplicationPageParams, ApplicationUrls } from "@/libs/router-dom";
 import { UserRole } from "@/types/enums";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-
+} from "@/components/ui/tooltip";
 import {
   Home,
   LogOut,

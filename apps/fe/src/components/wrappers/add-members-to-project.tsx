@@ -1,6 +1,5 @@
 import { useAddMembersToProjectMutation } from "@/hooks/tanstack/mutations/project/add-members";
 import { useOrganizationUsersQuery } from "@/hooks/tanstack/query/user/organization-users";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 import { UserX } from "lucide-react";
 import { PropsWithChildren, useCallback, useId, useState } from "react";
 import {
@@ -16,6 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog";
 import { Skeleton } from "../ui/skeleton";
 

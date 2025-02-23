@@ -8,7 +8,7 @@ export const CREATE_TASK_QUERY = `
 `;
 
 export const PROJECT_TASKS_QUERY = `
-  mutation Tasks($input: TasksListInput!) {
+  query Tasks($input: TasksListInput!) {
     tasks(input: $input) {
       id
       title
@@ -23,7 +23,7 @@ export const PROJECT_TASKS_QUERY = `
 `;
 
 export const PROJECT_TASK_QUERY = `
-  mutation Task($input: OneTaskInput!) {
+  query Task($input: OneTaskInput!) {
     task(input: $input) {
       id
       title

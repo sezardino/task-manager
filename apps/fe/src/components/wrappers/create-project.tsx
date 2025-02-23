@@ -1,7 +1,6 @@
 import { useCreateProjectMutation } from "@/hooks/tanstack/mutations/project/create";
 import { useOrganizationUsersQuery } from "@/hooks/tanstack/query/user/organization-users";
 import { ApplicationUrls } from "@/libs/router-dom";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 import { PropsWithChildren, useCallback, useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProjectForm, ProjectFormValues } from "../forms/project";
@@ -14,6 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog";
 import { Skeleton } from "../ui/skeleton";
 

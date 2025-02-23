@@ -20,7 +20,7 @@ export type ProjectTasksInput = {
 };
 
 export type ProjectTasksPayload = GQLPayload<{
-  tasks: TaskEntity[];
+  tasks: Pick<TaskEntity, "id" | "title" | "assignee" | "status">[];
 }>;
 
 export type ProjectTaskInput = {
@@ -34,6 +34,8 @@ export type ProjectTaskPayload = GQLPayload<{
 }>;
 
 export type UpdateTaskInput = {
+  organizationId: string;
+  projectId: string;
   id: string;
   title?: string;
   description?: string;
