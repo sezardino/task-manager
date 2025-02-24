@@ -1,5 +1,24 @@
 # **Task Manager Application (Monorepo)**
 
+## 📚 **Table of Contents**
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+  - [Backend (NestJS + GraphQL)](#backend-nestjs--graphql)
+  - [Frontend (React + Vite)](#frontend-react--vite)
+- [Technology Stack](#technology-stack)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+  - [Database](#database)
+- [How to Run the Project in dev mode](#how-to-run-the-project-in-dev-mode)
+- [How to Run the Project in preview mode](#how-to-run-the-project-in-preview-mode)
+- [Planned Improvements](#planned-improvements)
+  - [Backend Improvements](#backend-improvements)
+  - [Frontend Improvements](#frontend-improvements)
+- [Conclusion](#conclusion)
+
+---
+
 ## **Overview**
 
 **Task Manager Application** is a project management tool that helps users organize tasks, manage teams, and track progress.
@@ -19,7 +38,7 @@ The system supports **multi-organization** management, task tracking, and **role
 - **Authentication & Authorization**
 
   - **JWT-based** authentication
-  - **token rotation** implemented refresh token functionality
+  - **Token rotation** with refresh token support
   - **Role-based access control** (e.g., **OWNER, ADMIN, MEMBER**)
 
 - **Organization Management**
@@ -103,19 +122,19 @@ git clone https://github.com/sezardino/task-manager
 cd task-manager
 ```
 
-### **3. Add needed environment variables**
+### **2. Add needed environment variables**
 
 #### For frontend
 
-in /aps/fe add .env file with code
+In `/apps/fe`, add a `.env` file with the following content:
 
 ```bash
 VITE_BACKEND_URL=http://localhost:8001
 ```
 
-#### For frontend
+#### For backend
 
-in /aps/fe add .env file with code
+In `/apps/be`, add a `.env` file with the following content:
 
 ```bash
 PORT=8001
@@ -129,7 +148,6 @@ REFRESH_TOKEN_SECRET=tFNtNsna9nJcqPca5Sz4tZtxEomnAQaI
 REFRESH_TOKEN_EXPIRES_IN=7d
 
 ORGANIZATION_INVITE_TOKEN_SECRET=tFNtNsna9nJcqPhre5Sz4tZtxEomnAQaI
-
 ```
 
 ### **3. Install Dependencies (Using npm)**
@@ -138,14 +156,14 @@ ORGANIZATION_INVITE_TOKEN_SECRET=tFNtNsna9nJcqPhre5Sz4tZtxEomnAQaI
 npm install
 ```
 
-### **5. Run prisma migrations**
+### **4. Run Prisma Migrations**
 
 ```bash
 cd ./apps/be
 npx prisma db push
 ```
 
-### **5. Start frontend and backend**
+### **5. Start Frontend and Backend**
 
 ```bash
 npm run dev
@@ -155,60 +173,44 @@ npm run dev
 
 ---
 
----
-
 ## **How to Run the Project in preview mode**
 
-### **1. Clone the Repository**
+Repeat the same steps as above, but use `npm run preview` to start the project in **preview** mode.
 
-```bash
-git clone https://github.com/sezardino/task-manager
-cd task-manager
-```
+---
 
-### **3. Add needed environment variables**
+## **Planned Improvements**
 
-#### For frontend
+The following features and enhancements are **yet to be implemented**:
 
-in /aps/fe add .env file with code
+### **Backend Improvements**
 
-```bash
-VITE_BACKEND_URL=http://localhost:8001
-```
+- **Enhanced Authorization Guards**
+  - Restrict **organization creation** to **OWNERS** only.
+  - Ensure only **project members** can interact with project resources (tasks, updates, etc.).
+  - Add fine-grained access control for different roles across all resolvers.
 
-#### For frontend
+### **Frontend Improvements**
 
-in /aps/fe add .env file with code
+- **Type Safety**
 
-```bash
-PORT=8001
+  - Improve and **clean up type definitions** across the codebase.
+  - Ensure all GraphQL responses and API layers use **strict TypeScript types**.
 
-DATABASE_URL=mongodb+srv://e7097504:0EqcPbCFykg42Z0W@cluster0.7sh6f.mongodb.net/task-manager?retryWrites=true&w=majority&appName=Cluster0
+- **Route Guards**
 
-ACCESS_TOKEN_SECRET=TuftmsdI2ys85w6szQDEDp2Eq9ef9CZ8
-ACCESS_TOKEN_EXPIRES_IN=15m
+  - Restrict **authenticated users** from accessing login or registration pages.
+  - Add **custom 404 pages** for undefined routes.
 
-REFRESH_TOKEN_SECRET=tFNtNsna9nJcqPca5Sz4tZtxEomnAQaI
-REFRESH_TOKEN_EXPIRES_IN=7d
-
-ORGANIZATION_INVITE_TOKEN_SECRET=tFNtNsna9nJcqPhre5Sz4tZtxEomnAQaI
-
-```
-
-### **3. Install Dependencies (Using npm)**
-
-```bash
-npm install
-```
-
-### **3. Start frontend and backend**
-
-```bash
-npm run dev
-```
+- **User Invitations**
+  - Implement invitation handling for **logged-in users**:
+    - Accept and manage invitations for projects and organizations.
+    - Provide UI for users to view pending invites and accept/reject them.
 
 ---
 
 ## **Conclusion**
 
 This project is a **monorepo** that integrates a **NestJS + GraphQL** backend with a **React + Vite** frontend, leveraging **modern technologies** and **best practices** for scalable and maintainable task management.
+
+Further improvements are planned to enhance **security**, **user experience**, and **developer ergonomics**.
