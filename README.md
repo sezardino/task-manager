@@ -92,6 +92,123 @@ The system supports **multi-organization** management, task tracking, and **role
 - **MongoDB** — NoSQL database for structured and unstructured data
 - **Prisma ORM** — Type-safe and modern data layer
 
+---
+
+## **How to Run the Project in dev mode**
+
+### **1. Clone the Repository**
+
+```bash
+git clone https://github.com/sezardino/task-manager
+cd task-manager
+```
+
+### **3. Add needed environment variables**
+
+#### For frontend
+
+in /aps/fe add .env file with code
+
+```bash
+VITE_BACKEND_URL=http://localhost:8001
+```
+
+#### For frontend
+
+in /aps/fe add .env file with code
+
+```bash
+PORT=8001
+
+DATABASE_URL=mongodb+srv://e7097504:0EqcPbCFykg42Z0W@cluster0.7sh6f.mongodb.net/task-manager?retryWrites=true&w=majority&appName=Cluster0
+
+ACCESS_TOKEN_SECRET=TuftmsdI2ys85w6szQDEDp2Eq9ef9CZ8
+ACCESS_TOKEN_EXPIRES_IN=15m
+
+REFRESH_TOKEN_SECRET=tFNtNsna9nJcqPca5Sz4tZtxEomnAQaI
+REFRESH_TOKEN_EXPIRES_IN=7d
+
+ORGANIZATION_INVITE_TOKEN_SECRET=tFNtNsna9nJcqPhre5Sz4tZtxEomnAQaI
+
+```
+
+### **3. Install Dependencies (Using npm)**
+
+```bash
+npm install
+```
+
+### **5. Run prisma migrations**
+
+```bash
+cd ./apps/be
+npx prisma db push
+```
+
+### **5. Start frontend and backend**
+
+```bash
+npm run dev
+```
+
+### **6. Open browser on http://localhost:3000**
+
+---
+
+---
+
+## **How to Run the Project in preview mode**
+
+### **1. Clone the Repository**
+
+```bash
+git clone https://github.com/sezardino/task-manager
+cd task-manager
+```
+
+### **3. Add needed environment variables**
+
+#### For frontend
+
+in /aps/fe add .env file with code
+
+```bash
+VITE_BACKEND_URL=http://localhost:8001
+```
+
+#### For frontend
+
+in /aps/fe add .env file with code
+
+```bash
+PORT=8001
+
+DATABASE_URL=mongodb+srv://e7097504:0EqcPbCFykg42Z0W@cluster0.7sh6f.mongodb.net/task-manager?retryWrites=true&w=majority&appName=Cluster0
+
+ACCESS_TOKEN_SECRET=TuftmsdI2ys85w6szQDEDp2Eq9ef9CZ8
+ACCESS_TOKEN_EXPIRES_IN=15m
+
+REFRESH_TOKEN_SECRET=tFNtNsna9nJcqPca5Sz4tZtxEomnAQaI
+REFRESH_TOKEN_EXPIRES_IN=7d
+
+ORGANIZATION_INVITE_TOKEN_SECRET=tFNtNsna9nJcqPhre5Sz4tZtxEomnAQaI
+
+```
+
+### **3. Install Dependencies (Using npm)**
+
+```bash
+npm install
+```
+
+### **3. Start frontend and backend**
+
+```bash
+npm run dev
+```
+
+---
+
 ## **Conclusion**
 
 This project is a **monorepo** that integrates a **NestJS + GraphQL** backend with a **React + Vite** frontend, leveraging **modern technologies** and **best practices** for scalable and maintainable task management.

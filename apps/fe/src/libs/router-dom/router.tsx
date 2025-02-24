@@ -20,7 +20,11 @@ const OrganizationInvitePage = lazy(
 
 const OnboardingPage = lazy(() => import("@/pages/onboarding/index"));
 
-const OrganizationsPage = lazy(() => import("@/pages/organizations/index"));
+const DashboardPage = lazy(() => import("@/pages/application/dashboard"));
+const OrganizationsPage = lazy(
+  () => import("@/pages/application/organizations")
+);
+
 const OrganizationPage = lazy(
   () => import("@/pages/organizations/organization")
 );
@@ -104,7 +108,7 @@ export const router = createBrowserRouter([
         path: ApplicationUrls.application.index,
         Component: () => (
           <ApplicationLayout>
-            <h1>App</h1>
+            <DashboardPage />
           </ApplicationLayout>
         ),
       },
