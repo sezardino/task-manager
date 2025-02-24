@@ -8,6 +8,8 @@ import { OrganizationMembersModule } from './organization-members/organization-m
 import { OrganizationsModule } from './organizations/organizations.module';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './utils/prisma/prisma.module';
+import { ProjectsModule } from './projects/projects.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { PrismaModule } from './utils/prisma/prisma.module';
     OrganizationsModule,
     OrganizationInvitesModule,
     OrganizationMembersModule,
+    ProjectsModule,
+    TasksModule,
   ],
 })
 export class AppModule {}

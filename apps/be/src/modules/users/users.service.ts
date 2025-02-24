@@ -1,14 +1,22 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { hash } from 'argon2';
+import { OrganizationMembersService } from '../organization-members/organization-members.service';
 import { PrismaService } from '../utils/prisma/prisma.service';
 import { PrismaTransaction } from '../utils/prisma/types';
 import { CreateUserInput } from './dto/create-user.input';
+import { OrganizationUserInput } from './dto/organization-user.input';
+import { OrganizationUsersInput } from './dto/organization-users.input';
 import { GqlUser } from './entities/user.entity';
+import { OrganizationUserPayload } from './payloads/organization-user.payload';
+import { OrganizationUsersPayload } from './payloads/organization-users.payload';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly organizationMembersService: OrganizationMembersService,
+  ) {}
 
   async findForAuth(dto: { id?: string; email?: string }) {
     if (!dto.email && !dto.id)
@@ -63,5 +71,17 @@ export class UsersService {
         role,
       },
     });
+  }
+
+  organizationUser(
+    input: OrganizationUserInput,
+  ): Promise<OrganizationUserPayload> {
+    return this.organizationMembersService.one(input);
+  }
+
+  async organizationUsers(
+    input: OrganizationUsersInput,
+  ): Promise<OrganizationUsersPayload> {
+    return await this.organizationMembersService.list(input);
   }
 }

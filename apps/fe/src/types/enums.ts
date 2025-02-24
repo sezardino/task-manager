@@ -16,3 +16,16 @@ export enum UserRole {
   MEMBER = "MEMBER",
   ADMIN = "ADMIN",
 }
+
+export enum ProjectRole {
+  OWNER = "OWNER",
+  MANAGER = "MANAGER",
+  MEMBER = "MEMBER",
+}
+
+export enum TaskStatus {
+  NOT_STARTED = "NOT_STARTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  IN_REVIEW = "IN_REVIEW",
+  COMPLETED = "COMPLETED",
+}

@@ -60,7 +60,7 @@ export class AuthService {
     };
 
     const tokens = await this.generateTokens(atPayload, rtPayload);
-    console.log(user);
+
     return {
       email: user.email,
       accessToken: tokens.access,

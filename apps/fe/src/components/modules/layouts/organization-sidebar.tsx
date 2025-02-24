@@ -3,34 +3,52 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useCurrentUserQuery } from "@/hooks/tanstack/query/user/current-user";
 import { useForceLogout } from "@/hooks/use-force-logout";
 import { ApplicationPageParams, ApplicationUrls } from "@/libs/router-dom";
 import { UserRole } from "@/types/enums";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-
-import { LogOut, Rabbit, UserPlus, Users } from "lucide-react";
+} from "@/components/ui/tooltip";
+import {
+  Home,
+  LogOut,
+  Rabbit,
+  SquareChartGantt,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import { SidebarMenuWidget } from "./sidebar-menu-widget";
 
 export const OrganizationSidebar = () => {
   const { data: user } = useCurrentUserQuery();
-  // const location = useLocation();
+
   const params = useParams();
   const logout = useForceLogout();
   const organizationId = params[ApplicationPageParams.organizationId];
+
+  const mainLinks = useMemo(
+    () => [
+      {
+        title: "Home",
+        icon: Home,
+        href: ApplicationUrls.application.organization.index(organizationId),
+      },
+      {
+        title: "Projects",
+        icon: SquareChartGantt,
+        href: ApplicationUrls.application.organization.projects(organizationId),
+      },
+    ],
+    [organizationId]
+  );
 
   const ownerLinks = useMemo(
     () => [
@@ -52,35 +70,17 @@ export const OrganizationSidebar = () => {
     <Sidebar>
       <SidebarHeader>
         <Link to={ApplicationUrls.application.index}>
-          <Rabbit className="size-9 inline" />
+          <Rabbit className="size-9 inline text-muted-foreground" />
           <span className="ml-2 text-lg font-bold">Task manager</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarMenuWidget label="Main" links={mainLinks} />
+
         {[UserRole.OWNER, UserRole.ADMIN].includes(
           user?.role || UserRole.MEMBER
-        ) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Owner</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {ownerLinks.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={location.pathname === item.href}
-                    >
-                      <Link to={item.href}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+        ) && <SidebarMenuWidget label="Manage" links={ownerLinks} />}
+
         <SidebarFooter className="mt-auto">
           <ul className="flex items-center justify-center gap-2">
             <li>
