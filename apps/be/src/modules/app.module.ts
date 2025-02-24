@@ -4,12 +4,11 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from './auth/auth.module';
 import { OrganizationInvitesModule } from './organization-invites/organization-invites.module';
-import { OrganizationMembersModule } from './organization-members/organization-members.module';
 import { OrganizationsModule } from './organizations/organizations.module';
-import { UsersModule } from './users/users.module';
-import { PrismaModule } from './utils/prisma/prisma.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
+import { UsersModule } from './users/users.module';
+import { PrismaModule } from './utils/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { TasksModule } from './tasks/tasks.module';
     AuthModule,
     OrganizationsModule,
     OrganizationInvitesModule,
-    OrganizationMembersModule,
     ProjectsModule,
     TasksModule,
   ],

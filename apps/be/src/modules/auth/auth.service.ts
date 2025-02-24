@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { verify } from 'argon2';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/services/users.service';
 import { TokensService } from '../utils/tokens/tokens.service';
 import { TokenType } from '../utils/tokens/types/params';
 import {

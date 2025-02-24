@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { getPaginationData } from 'src/common/utils/pagination';
-import { OrganizationUserInput } from '../users/dto/organization-user.input';
-import { OrganizationUsersInput } from '../users/dto/organization-users.input';
-import { OrganizationUserPayload } from '../users/payloads/organization-user.payload';
-import { OrganizationUsersPayload } from '../users/payloads/organization-users.payload';
-import { PrismaService } from '../utils/prisma/prisma.service';
-import { PrismaTransaction } from '../utils/prisma/types';
-import { CreateOrganizationMemberInput } from './dto/create-organization-member.input';
+import { PrismaService } from 'src/modules/utils/prisma/prisma.service';
+import { PrismaTransaction } from 'src/modules/utils/prisma/types';
+import { CreateOrganizationMemberInput } from '../dto/create-organization-member.input';
+import { OrganizationUserInput } from '../dto/organization-user.input';
+import { OrganizationUsersInput } from '../dto/organization-users.input';
+import { OrganizationUserPayload } from '../payloads/organization-user.payload';
+import { OrganizationUsersPayload } from '../payloads/organization-users.payload';
 
 @Injectable()
 export class OrganizationMembersService {

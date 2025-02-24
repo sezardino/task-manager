@@ -2,8 +2,6 @@ import { BadRequestException } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { isUUID } from 'class-validator';
 import { CurrentUser } from '../auth/decorators/user.decorator';
-import { OrganizationMembersService } from '../organization-members/organization-members.service';
-import { ProjectMembersService } from '../project-members/project-members.service';
 import { OrganizationUserInput } from './dto/organization-user.input';
 import { OrganizationUsersInput } from './dto/organization-users.input';
 import { ProjectUsersInput } from './dto/project-users.input';
@@ -11,7 +9,9 @@ import { GqlUser } from './entities/user.entity';
 import { OrganizationUserPayload } from './payloads/organization-user.payload';
 import { OrganizationUsersPayload } from './payloads/organization-users.payload';
 import { ProjectUsersPayload } from './payloads/project-users.payload';
-import { UsersService } from './users.service';
+import { UsersService } from './services/users.service';
+import { OrganizationMembersService } from './services/organization-members.service';
+import { ProjectMembersService } from './services/project-members.service';
 
 @Resolver(() => GqlUser)
 export class UsersResolver {

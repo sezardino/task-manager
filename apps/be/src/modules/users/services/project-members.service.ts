@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { ProjectRole } from '@prisma/client';
 import { getPaginationData } from 'src/common/utils/pagination';
-import { AddUsersToProjectPayload } from '../projects/payload/add-users-to-project.payload';
-import { ProjectUsersInput } from '../users/dto/project-users.input';
-import { ProjectUsersPayload } from '../users/payloads/project-users.payload';
-import { PrismaService } from '../utils/prisma/prisma.service';
-import { AddUsersToProjectInput } from './dto/add-users-to-project.input';
+import { AddUsersToProjectPayload } from '../../projects/payload/add-users-to-project.payload';
+import { PrismaService } from '../../utils/prisma/prisma.service';
+import { AddUsersToProjectInput } from '../dto/add-users-to-project.input';
+import { ProjectUsersInput } from '../dto/project-users.input';
+import { ProjectUsersPayload } from '../payloads/project-users.payload';
 
 @Injectable()
 export class ProjectMembersService {

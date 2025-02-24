@@ -8,9 +8,8 @@ import {
 import { InviteStatus, UserRole } from '@prisma/client';
 import { hash, verify } from 'argon2';
 import { getPaginationData } from 'src/common/utils/pagination';
-import { OrganizationMembersService } from '../organization-members/organization-members.service';
 import { OrganizationsService } from '../organizations/organizations.service';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/services/users.service';
 import { PrismaService } from '../utils/prisma/prisma.service';
 import { TokensService } from '../utils/tokens/tokens.service';
 import { TokenType } from '../utils/tokens/types/params';
@@ -24,6 +23,7 @@ import { CreateOrganizationInvitePayload } from './payload/create-organization-i
 import { OrganizationInvitesPayload } from './payload/organization-invites.payload';
 import { ProcessOrganizationInvitePayload } from './payload/process-organization-invite.payload';
 import { VerifyOrganizationInvitePayload } from './payload/verify-organization-invite.payload';
+import { OrganizationMembersService } from '../users/services/organization-members.service';
 
 @Injectable()
 export class OrganizationInvitesService {

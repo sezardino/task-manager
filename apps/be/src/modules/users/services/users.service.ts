@@ -1,15 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { hash } from 'argon2';
-import { OrganizationMembersService } from '../organization-members/organization-members.service';
-import { PrismaService } from '../utils/prisma/prisma.service';
-import { PrismaTransaction } from '../utils/prisma/types';
-import { CreateUserInput } from './dto/create-user.input';
-import { OrganizationUserInput } from './dto/organization-user.input';
-import { OrganizationUsersInput } from './dto/organization-users.input';
-import { GqlUser } from './entities/user.entity';
-import { OrganizationUserPayload } from './payloads/organization-user.payload';
-import { OrganizationUsersPayload } from './payloads/organization-users.payload';
+import { PrismaService } from '../../utils/prisma/prisma.service';
+import { PrismaTransaction } from '../../utils/prisma/types';
+import { CreateUserInput } from '../dto/create-user.input';
+import { OrganizationUserInput } from '../dto/organization-user.input';
+import { OrganizationUsersInput } from '../dto/organization-users.input';
+import { GqlUser } from '../entities/user.entity';
+import { OrganizationUserPayload } from '../payloads/organization-user.payload';
+import { OrganizationUsersPayload } from '../payloads/organization-users.payload';
+import { OrganizationMembersService } from './organization-members.service';
 
 @Injectable()
 export class UsersService {
