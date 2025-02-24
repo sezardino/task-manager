@@ -23,11 +23,20 @@ export type TaskCardProps = ComponentPropsWithoutRef<"div"> & {
   status: TaskStatus;
   onChangeStatus: (status: TaskStatus) => void;
   href: string;
+  onUpdateTask: () => void;
 };
 
 export const TaskCard = (props: TaskCardProps) => {
-  const { href, assignee, title, status, onChangeStatus, className, ...rest } =
-    props;
+  const {
+    href,
+    assignee,
+    title,
+    status,
+    onChangeStatus,
+    onUpdateTask,
+    className,
+    ...rest
+  } = props;
 
   const { nextStatus, prevStatus } = getNextPrevTaskStatus(status);
 
@@ -49,6 +58,7 @@ export const TaskCard = (props: TaskCardProps) => {
             <DropdownMenuItem asChild>
               <Link to={href}>Show task details</Link>
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={onUpdateTask}>Edit</DropdownMenuItem>
             {prevStatus && (
               <DropdownMenuItem onClick={() => onChangeStatus(prevStatus)}>
                 Back to

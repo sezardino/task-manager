@@ -22,7 +22,7 @@ export type ProjectEntity = {
 };
 
 export type TaskEntity = {
-  assignee: Pick<UserEntity, "email" | "firstName" | "lastName">;
+  assignee: Pick<UserEntity, "id" | "email" | "firstName" | "lastName">;
   id: string;
   title: string;
   description: string | null;

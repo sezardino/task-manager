@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../utils/prisma/prisma.service';
 import { CreateTaskInput } from './dto/create-task.input';
-import { OneTasksInput } from './dto/one-tasks.input';
+import { OneTaskInput } from './dto/one-tasks.input';
 import { TasksListInput } from './dto/tasks-list.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { GqlTask } from './entities/task.entity';
@@ -68,7 +68,7 @@ export class TasksService {
     return tasks;
   }
 
-  async findOne(input: OneTasksInput): Promise<GqlTask> {
+  async findOne(input: OneTaskInput): Promise<GqlTask> {
     const { projectId, organizationId, id } = input;
 
     await this.validateProject({

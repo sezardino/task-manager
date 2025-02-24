@@ -3,20 +3,29 @@ import { BoardColumn } from "@/components/modules/tasks/board-column";
 import { TaskCard } from "@/components/modules/tasks/task-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CreateTaskWrapper } from "@/components/wrappers/create-task";
+import { CreateUpdateTaskWrapper } from "@/components/wrappers/create-update-task";
+import { TaskDetailsWrapper } from "@/components/wrappers/task-details";
 import { useUpdateTaskMutation } from "@/hooks/tanstack/mutations/task/update";
 import { useOrganizationProjectQuery } from "@/hooks/tanstack/query/project/one";
 import { useProjectTasksQuery } from "@/hooks/tanstack/query/task/list";
-import { ApplicationPageParams } from "@/libs/router-dom";
+import {
+  ApplicationPageParams,
+  ApplicationSearchParams,
+  ApplicationUrls,
+} from "@/libs/router-dom";
 import { TaskStatus } from "@/types/enums";
 import { useCallback, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const ProjectPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
   const organizationId = params[ApplicationPageParams.organizationId] as string;
   const projectId = params[ApplicationPageParams.projectId] as string;
+  const taskId = searchParams.get(ApplicationSearchParams.taskId);
 
   const [isCreateTaskModalOpened, setIsCreateTaskModalOpened] = useState(false);
+  const [taskToUpdateId, setTaskToUpdateId] = useState<string | null>(null);
 
   const { data: projectData, isLoading: isProjectDataLoading } =
     useOrganizationProjectQuery({ organizationId, projectId });
@@ -30,7 +39,6 @@ const ProjectPage = () => {
 
   const changeTaskStatusHandler = useCallback(
     (taskId: string, status: TaskStatus) => {
-      console.log(123);
       updateTask({
         id: taskId,
         status,
@@ -78,7 +86,7 @@ const ProjectPage = () => {
                   status={status as TaskStatus}
                   onAddTaskClick={() => setIsCreateTaskModalOpened(true)}
                 >
-                  <ul>
+                  <ul className="flex flex-col gap-2">
                     {isTasksLoading &&
                       new Array(10).fill(null).map((_, i) => (
                         <li key={i}>
@@ -92,10 +100,15 @@ const ProjectPage = () => {
                           status={status as TaskStatus}
                           title={t.title}
                           assignee={t.assignee}
-                          href="#"
+                          href={ApplicationUrls.application.organization.project.taskDetails(
+                            t.id,
+                            projectId,
+                            organizationId
+                          )}
                           onChangeStatus={(status) =>
                             changeTaskStatusHandler(t.id, status)
                           }
+                          onUpdateTask={() => setTaskToUpdateId(t.id)}
                         />
                       </li>
                     ))}
@@ -107,11 +120,28 @@ const ProjectPage = () => {
         </section>
       </main>
 
+      <CreateUpdateTaskWrapper
+        isOpen={!!taskToUpdateId}
+        taskId={taskToUpdateId || undefined}
+        onClose={() => setTaskToUpdateId(null)}
+        organizationId={organizationId}
+        projectId={projectId}
+      />
+
       <CreateTaskWrapper
         isOpen={isCreateTaskModalOpened}
         onClose={() => setIsCreateTaskModalOpened(false)}
         organizationId={organizationId}
         projectId={projectId}
+      />
+
+      <TaskDetailsWrapper
+        onClose={() =>
+          setSearchParams({ [ApplicationSearchParams.taskId]: "" })
+        }
+        organizationId={organizationId}
+        projectId={projectId}
+        taskId={taskId}
       />
     </>
   );

@@ -30,6 +30,7 @@ export const PROJECT_TASK_QUERY = `
       description
       status
       assignee {
+        id
         email
         firstName
         lastName

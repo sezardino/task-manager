@@ -1,6 +1,7 @@
 export const ApplicationSearchParams = {
   inviteToken: "invite-token",
   loginEmail: "email",
+  taskId: "task-id",
 };
 
 export const ApplicationPageParams = {
@@ -41,6 +42,12 @@ export const ApplicationUrls = Object.freeze({
           organizationId?: string
         ) =>
           `${ApplicationUrls.application.organization.projects(organizationId)}/${id}/users`,
+        taskDetails: (
+          taskId: string,
+          projectId: string,
+          organizationId: string
+        ) =>
+          `${ApplicationUrls.application.organization.projects(organizationId)}/${projectId}?${ApplicationSearchParams.taskId}=${taskId}`,
       },
     },
   },

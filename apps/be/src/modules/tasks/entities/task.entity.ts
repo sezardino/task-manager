@@ -6,6 +6,7 @@ registerEnumType(TaskStatus, { name: 'TaskStatus' });
 
 @ObjectType()
 class TaskAssignee extends PickType(GqlUser, [
+  'id',
   'email',
   'firstName',
   'lastName',
@@ -18,6 +19,9 @@ export class GqlTask {
 
   @Field()
   title: string;
+
+  @Field({ nullable: true })
+  description: string;
 
   @Field(() => TaskStatus)
   status: TaskStatus;

@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateTaskInput } from './dto/create-task.input';
-import { OneTasksInput } from './dto/one-tasks.input';
+import { OneTaskInput } from './dto/one-tasks.input';
 import { TasksListInput } from './dto/tasks-list.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { GqlTask } from './entities/task.entity';
@@ -22,8 +22,8 @@ export class TasksResolver {
     return this.tasksService.findAll(input);
   }
 
-  @Query(() => GqlTask)
-  findOne(@Args('input') input: OneTasksInput) {
+  @Query(() => GqlTask, { name: 'task' })
+  findOne(@Args('input') input: OneTaskInput) {
     return this.tasksService.findOne(input);
   }
 
